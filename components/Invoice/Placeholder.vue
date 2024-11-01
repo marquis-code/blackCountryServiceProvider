@@ -2,7 +2,7 @@
 <template>
     <div class="flex flex-col items-center justify-center mt-8 p-8 bg-white border border-gray-50 h-72 rounded-lg text-center">
       <div class="relative flex items-center justify-center rounded-full">
-        <img src="@/assets/img/illustration.png" class="h-32" />
+        <img src="@/assets/icons/listing-illustration.svg" class="h-32" />
         <div class="absolute inset-0 flex items-center justify-center ">
           <div class="w-full h-full rounded-full bg-gray-200 opacity-30"></div>
         </div>
