@@ -1,18 +1,30 @@
 <template>
-  <NuxtLayout name="hello">
-    <template #title>{{ productName }}</template>
-    <template #message>{{ message }}</template>
-  </NuxtLayout>
+  <div
+    v-if="isVisible"
+    class="fixed inset-0 flex items-center justify-center bg-white transition-opacity duration-700 ease-in-out"
+    :class="{ 'opacity-0': !isVisible }"
+  >
+ <img src="@/assets/icons/splash-logo.svg" alt="" />
+    <!-- <h1 class="text-white text-3xl font-bold animate-pulse">Welcome to My App</h1> -->
+  </div>
 </template>
 
 <script setup lang="ts">
-const productName: string = "Nuxt 3 Starter Kit";
-const features: string[] = ["Vite", "Vue 3", "TypeScript", "PostCSS", "TailwindCSS"];
-const message = computed(
-  () => `This is a ${productName} with ${features.slice(0, -1).join(", ")} and ${features.slice(-1)}!`
-);
+import { ref, onMounted } from 'vue'
+const router = useRouter()
 
-definePageMeta({
-  layout: false,
-});
+// Splash screen visibility state
+const isVisible = ref(true)
+
+onMounted(() => {
+  // Hold the splash screen for 3 seconds, then fade out
+  setTimeout(() => {
+    isVisible.value = false
+    router.push('/login')
+  }, 3000)
+})
 </script>
+
+<style scoped>
+/* Additional animations, if needed */
+</style>

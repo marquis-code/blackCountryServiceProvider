@@ -1,0 +1,23 @@
+<svg width="152" height="124" viewBox="0 0 152 124" fill="none" xmlns="http://www.w3.org/2000/svg">
+<circle cx="76" cy="58" r="52" fill="#EAEAEA"/>
+<circle cx="21" cy="25" r="5" fill="#BDBDBD"/>
+<circle cx="18" cy="109" r="7" fill="#BDBDBD"/>
+<circle cx="145" cy="41" r="7" fill="#BDBDBD"/>
+<circle cx="134" cy="14" r="4" fill="#BDBDBD"/>
+<g filter="url(#filter0_b_6053_204191)">
+<rect x="52" y="34" width="48" height="48" rx="24" fill="#9D9D9D"/>
+<path d="M66.5 58.2432C66.5 53.8859 66.5 51.7073 67.7521 50.3536C69.0042 49 71.0195 49 75.05 49H76.95C80.9805 49 82.9958 49 84.2479 50.3536C85.5 51.7073 85.5 53.8859 85.5 58.2432V58.7568C85.5 63.1141 85.5 65.2927 84.2479 66.6464C82.9958 68 80.9805 68 76.95 68H75.05C71.0195 68 69.0042 68 67.7521 66.6464C66.5 65.2927 66.5 63.1141 66.5 58.7568V58.2432Z" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M67 54H85" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M67.5 54H84.5" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M75.9955 59H76.0045M75.9955 63H76.0045M79.991 59H80M72 59H72.009M72 63H72.009" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M82 48V50M70 48V50" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<filter id="filter0_b_6053_204191" x="44" y="26" width="64" height="64" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feGaussianBlur in="BackgroundImageFix" stdDeviation="4"/>
+<feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_6053_204191"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_6053_204191" result="shape"/>
+</filter>
+</defs>
+</svg>
