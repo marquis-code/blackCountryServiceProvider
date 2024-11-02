@@ -23,7 +23,7 @@ export const use_auth_login = () => {
     const res = (await auth_api.$_login({
       email: credential.email.value,
       password: credential.password.value,
-      app: 'tenant-app'
+      app: "service-provider-app"
     })) as any;
     loading.value = false;
     if (res.type !== "ERROR") {
