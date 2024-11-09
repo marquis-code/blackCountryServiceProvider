@@ -115,7 +115,7 @@
         {{ loading ? "processing..." : "Continue" }}
         </button>
       </form>
-      <div class="flex items-center justify-center my-6">
+      <!-- <div class="flex items-center justify-center my-6">
         <div class="border-t border-gray-200 flex-grow mr-3"></div>
         <span class="text-gray-500 font-medium">Or</span>
         <div class="border-t border-gray-200 flex-grow ml-3"></div>
@@ -139,7 +139,7 @@
               
             Sign In with Apple
           </button>
-      </div>
+      </div> -->
   
       <!-- <p class="mt-6 text-center text-[#1D2739] text-sm">
         Don't have an account?

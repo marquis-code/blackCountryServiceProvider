@@ -387,6 +387,8 @@
 
   <script setup lang="ts">
 import { dynamicIcons } from "@/utils/assets";
+import { useCustomToast } from '@/composables/core/useCustomToast'
+const { showToast } = useCustomToast();
 const router = useRouter();
 definePageMeta({
   middleware: "auth",
@@ -430,10 +432,12 @@ const checkOnlineStatus = () => {
     router.push(router?.options?.history?.state?.current);
   } else {
     router.push("/login");
-    useNuxtApp().$toast.success("You are currently offline.", {
-      autoClose: 5000,
-      dangerouslyHTMLString: true,
-    });
+    showToast({
+          title: "Error",
+          message: "kindly check your network connection.You are currently offline.",
+          toastType: "error",
+          duration: 3000
+        });
   }
 };
 

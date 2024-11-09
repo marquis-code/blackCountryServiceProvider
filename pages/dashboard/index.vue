@@ -3,7 +3,8 @@
     <section class="bg-gray-25">
 
       <div class="min-h-screen max-w-5xl mx-auto p-4 lg:p-6">
-        <h1 class="text-lg font-semibold mb-4">Welcome Saeed 👋</h1>
+        <h1 class="text-lg font-semibold mb-4">Welcome <span class="text-">{{ `${user?.firstName} ${user?.lastName}` ?? 'Nil' }}</span> 👋</h1>
+
 
       
         <div class="grid grid-cols-1 sm:grid-cols-4 gap-2 mb-6">
@@ -50,6 +51,8 @@
 </template>
 
 <script setup lang="ts">
+  import { useUser } from '@/composables/auth/user'
+  const { user } = useUser()
 definePageMeta({
   layout: "dashboard"
 })

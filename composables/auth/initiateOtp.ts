@@ -1,4 +1,7 @@
 import { auth_api } from '@/api_factory/modules/auth'
+import { useCustomToast } from '@/composables/core/useCustomToast'
+const { showToast } = useCustomToast();
+
 export const use_initiate_otp = () => {
 	const credential = {
 		email: ref('')
@@ -21,9 +24,11 @@ export const use_initiate_otp = () => {
 
 		loading.value = false
 		if (res.type !== 'ERROR') {
-			useNuxtApp().$toast.success("OTP was sent successfully.", {
-				autoClose: 5000,
-				dangerouslyHTMLString: true,
+			  showToast({
+				title: "Success",
+				message: "OTP was sent successfully.",
+				toastType: "success",
+				duration: 3000
 			  });
 			return res.data
 		}

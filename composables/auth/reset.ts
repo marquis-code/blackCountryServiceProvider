@@ -1,4 +1,7 @@
 import { auth_api } from "@/api_factory/modules/auth";
+import { useCustomToast } from '@/composables/core/useCustomToast'
+const { showToast } = useCustomToast();
+
 export const use_auth_reset_password = () => {
   const Router = useRouter();
   const route = useRoute();
@@ -27,15 +30,19 @@ export const use_auth_reset_password = () => {
 
     loading.value = false;
     if (res.type !== "ERROR") {
-      useNuxtApp().$toast.success(res.data.message, {
-        autoClose: 5000,
-        dangerouslyHTMLString: true,
+      showToast({
+        title: "Success",
+        message: res.data.message,
+        toastType: "success",
+        duration: 3000
       });
       Router.push("/login");
     } else {
-      useNuxtApp().$toast.error(res.data.error || "Something went wrong!", {
-        autoClose: 5000,
-        dangerouslyHTMLString: true,
+      showToast({
+        title: "Error",
+        message: res.data.error || "Something went wrong!",
+        toastType: "error",
+        duration: 3000
       });
     }
   };

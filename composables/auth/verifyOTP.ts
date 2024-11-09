@@ -1,5 +1,7 @@
 import { auth_api } from "@/api_factory/modules/auth";
 import { useUser } from "@/composables/auth/user";
+import { useCustomToast } from "@/composables/core/useCustomToast";
+const { showToast } = useCustomToast();
 
 export const use_auth_verify_otp = () => {
   const Router = useRouter();
@@ -27,9 +29,11 @@ export const use_auth_verify_otp = () => {
       loading.value = false;
 
       if (otpRes.type !== "ERROR") {
-        useNuxtApp().$toast.success(otpRes?.data?.message, {
-          autoClose: 5000,
-          dangerouslyHTMLString: true,
+        showToast({
+          title: "Success",
+          message: otpRes?.data?.message,
+          toastType: "success",
+          duration: 3000,
         });
         const referrer = route.query.referrer || route.meta.referrer;
         console.log(referrer, "here");
@@ -48,23 +52,26 @@ export const use_auth_verify_otp = () => {
             firstName,
             lastName: lastName || firstName,
             email: credential.email.value,
-            password: password
+            password: password,
           })) as any;
-          console.log(signupRes, 'here res')
+          console.log(signupRes, "here res");
           if (signupRes.type !== "ERROR") {
-            useNuxtApp().$toast.success(signupRes?.data?.message, {
-              autoClose: 5000,
-              dangerouslyHTMLString: true,
+            showToast({
+              title: "Success",
+              message: signupRes?.data?.message,
+              toastType: "success",
+              duration: 3000,
             });
+
             useUser().createUser(signupRes.data);
             Router.push("/success");
             return { success: true, data: signupRes?.data };
           } else {
-            errorMessage.value =
-              signupRes?.data?.error || "Registration failed.";
-            useNuxtApp().$toast.error(errorMessage.value, {
-              autoClose: 5000,
-              dangerouslyHTMLString: true,
+            showToast({
+              title: "Error",
+              message: errorMessage.value,
+              toastType: "error",
+              duration: 3000,
             });
             return { success: false, error: errorMessage.value };
           }
@@ -73,19 +80,21 @@ export const use_auth_verify_otp = () => {
           return { success: true, data: otpRes?.data };
         }
       } else {
-        errorMessage.value = otpRes?.data?.error || "OTP verification failed.";
-        useNuxtApp().$toast.error(errorMessage.value, {
-          autoClose: 5000,
-          dangerouslyHTMLString: true,
+        showToast({
+          title: "Error",
+          message: otpRes?.data?.error || "OTP verification failed.",
+          toastType: "error",
+          duration: 3000,
         });
         return { success: false, error: errorMessage.value };
       }
     } catch (error: any) {
       loading.value = false;
-      errorMessage.value = error?.message || "An unexpected error occurred.";
-      useNuxtApp().$toast.error(errorMessage.value, {
-        autoClose: 5000,
-        dangerouslyHTMLString: true,
+      showToast({
+        title: "Error",
+        message: error?.message || "An unexpected error occurred.",
+        toastType: "error",
+        duration: 3000,
       });
       return { success: false, error: errorMessage.value };
     }
