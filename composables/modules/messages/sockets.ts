@@ -34,6 +34,7 @@ export const useWebSocket = () => {
         toastType: "success",
         duration: 3000
       });
+      console.log('connected')
       isConnected.value = true;
       fetchInitialMessages();
     });

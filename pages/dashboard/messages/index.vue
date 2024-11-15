@@ -354,8 +354,9 @@
 </MessagingView>
 </template>
 
-<script setup lang="ts">
+<!-- <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted } from 'vue';
+import { useFetchTenant } from '@/composables/modules/tenant/fetch'
 import { useRouter, useRoute } from 'vue-router';
 import MessagingView from "@/layouts/MessagingView.vue";
 import { useGetActiveChats } from "@/composables/modules/messages/fetchActiveChats";
@@ -365,6 +366,7 @@ import { useWebSocket } from "@/composables/modules/messages/sockets";
 // Composables
 const { loadingActiveChats, activeChatsList } = useGetActiveChats();
 const { getRoomChats, loadingRoomChats, roomChatsList } = useGetRoomChats();
+const { loading, tenant } = useFetchTenant()
 const {
   messages,
   newMessage,
@@ -376,10 +378,12 @@ definePageMeta({
   middleware: 'auth'
 })
 
+
 const router = useRouter();
 const route = useRoute();
 const selectedUser = ref(null);
 const messageStatus = ref('idle');
+
 
 // Watch for selected user changes
 watch(selectedUser, async (newVal: any) => {
@@ -427,6 +431,7 @@ const sendMessageToUser = async (content: string) => {
   }
 };
 
+
 // User selection
 const selectUser = (user: any) => {
   selectedUser.value = user;
@@ -448,6 +453,7 @@ const { $emitter } = useNuxtApp();
 onMounted(() => {
   // Handle URL parameters
   const userId = route.query.userId;
+  console.log(userId, 'user here')
   if (userId && activeChatsList.value) {
     const user = activeChatsList.value.find(u => u.id === userId);
     if (user) {
@@ -462,6 +468,136 @@ onMounted(() => {
       scrollToBottom();
     }
   });
+});
+
+onUnmounted(() => {
+  // Clean up event listeners
+  $emitter.off('customEvent');
+});
+
+// State for dropdown visibility
+const showDropdown = ref(false);
+
+function toggleDropdown() {
+  showDropdown.value = !showDropdown.value;
+}
+</script> -->
+
+
+<script setup lang="ts">
+import { ref, watch, onMounted, onUnmounted } from 'vue';
+import { useFetchTenant } from '@/composables/modules/tenant/fetch';
+import { useRouter, useRoute } from 'vue-router';
+import MessagingView from "@/layouts/MessagingView.vue";
+import { useGetActiveChats } from "@/composables/modules/messages/fetchActiveChats";
+import { useGetRoomChats } from "@/composables/modules/messages/fetchRoomMessages";
+import { useWebSocket } from "@/composables/modules/messages/sockets";
+
+// Composables
+const { loadingActiveChats, activeChatsList } = useGetActiveChats();
+const { getRoomChats, loadingRoomChats, roomChatsList } = useGetRoomChats();
+const { loading, tenant } = useFetchTenant();
+const {
+  messages,
+  newMessage,
+  isConnected,
+  sendMessage
+} = useWebSocket();
+
+definePageMeta({
+  middleware: 'auth'
+});
+
+const router = useRouter();
+const route = useRoute();
+const selectedUser = ref(null);
+const messageStatus = ref('idle');
+
+// Watch for selected user changes
+watch(selectedUser, async (newVal: any) => {
+  if (newVal?.id) {
+    try {
+      await getRoomChats(newVal.id);
+    } catch (error) {
+      console.error('Failed to fetch room chats:', error);
+    }
+  }
+});
+
+// Watch for new messages to scroll to bottom
+watch(messages, (newMessages) => {
+  if (newMessages.length > 0) {
+    scrollToBottom();
+  }
+}, { deep: true });
+
+// Message handling
+const sendMessageToUser = async (content: string) => {
+  // Use tenant as fallback if selectedUser is null
+  const participant = selectedUser.value?.participant || tenant.value;
+
+  if (!participant?.id || !isConnected.value) {
+    console.error('Cannot send message: No recipient selected or not connected');
+    return;
+  }
+
+  messageStatus.value = 'sending';
+
+  try {
+    const socketPayload = {
+      content,
+      recipientId: participant.id,
+      recipientType: participant.role || 'TENANT', // Default role to TENANT if not provided
+      messageType: 'private',
+      room: selectedUser.value?.id || tenant.value.id // Use tenant's ID as room ID if selectedUser is null
+    };
+
+    await sendMessage(socketPayload);
+    messageStatus.value = 'sent';
+    newMessage.value = ''; // Clear input after successful send
+  } catch (error) {
+    console.error('Failed to send message:', error);
+    messageStatus.value = 'error';
+    // Optionally show error notification to user
+  }
+};
+
+// User selection
+const selectUser = (user: any) => {
+  selectedUser.value = user;
+  // Optionally update URL
+  router.push({ query: { userId: user.id } });
+};
+
+// Scroll handling
+const scrollToBottom = () => {
+  const chatWindow = document.querySelector('.custom-scrollbar');
+  if (chatWindow) {
+    chatWindow.scrollTop = chatWindow.scrollHeight;
+  }
+};
+
+// Event handling
+const { $emitter } = useNuxtApp();
+
+onMounted(() => {
+  // Handle URL parameters
+  const userId = route.query.userId;
+  console.log(userId, 'user here');
+  if (userId && activeChatsList.value) {
+    const user = activeChatsList.value.find(u => u.id === userId);
+    if (user) {
+      selectUser(user);
+    }
+  }
+
+  // // Set up event listeners
+  // $emitter.on('customEvent', async (payload: any) => {
+  //   if (payload.data) {
+  //     await getRoomChats(payload.data);
+  //     scrollToBottom();
+  //   }
+  // });
 });
 
 onUnmounted(() => {

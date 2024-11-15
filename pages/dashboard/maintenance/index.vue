@@ -1,40 +1,30 @@
 <template>
-   <main>
-    <section v-if="!requests.length" class="max-w-2xl mx-auto p-4 bg-white rounded-lg">
-      <h1 class="text-xl font-medium py-3 text-[#1D2739]">Maintenance</h1>
-
-      <MaintenanceEmptyState />
-    </section>
-    <MaintenanceList v-else :requests="requests" />
-   </main>
-  </template>
-  
-  <script lang="ts" setup>
-  import { ref } from 'vue';
-  
-  const tabs = ['All', 'Upcoming', 'Completed', 'Cancelled', 'Declined'];
-  const activeTab = ref<string>('All');
-  
-  const setActiveTab = (tab: string) => {
-    activeTab.value = tab;
-  };
-
-  definePageMeta({
-  layout: "dashboard"
-})
-
-const requests = ref([
-    { id: 1, date: '23rd March, 2024', type: 'Plumbing Service', location: 'Iconic Tower, off Ajose Adegun VI, Lagos.', status: 'New request', statusColor: 'bg-[#F9FAFB]', textColor: 'text-[#1D2739]', dueDate: '03/04/2024' },
-    { id: 2, date: '23rd March, 2024', type: 'Plumbing Service', location: 'Iconic Tower, off Ajose Adegun VI, Lagos.', status: 'Accepted', statusColor: 'bg-[#E8EDFB]', textColor: 'text-[#1D4ED8]', dueDate: '03/04/2024' },
-    { id: 3, date: '23rd March, 2024', type: 'Plumbing Service', location: 'Iconic Tower, off Ajose Adegun VI, Lagos.', status: 'Upcoming', statusColor: 'bg-[#FEF6E7]', textColor: 'text-[#F79009]', dueDate: '03/04/2024' },
-    { id: 4, date: '23rd March, 2024', type: 'Plumbing Service', location: 'Flat 12, Iconic Tower, off Ajose Adegun VI, Lagos.', status: 'Cancelled', statusColor: 'bg-[#F9FAFB]', textColor: 'text-[#1D2739]', dueDate: '03/04/2024' },
-    { id: 5, date: '23rd March, 2024', type: 'Plumbing Service', location: 'Iconic Tower, off Ajose Adegun VI, Lagos.', status: 'Completed', statusColor: 'bg-[#E7F6EC]', textColor: 'text-[#099137]', dueDate: '03/04/2024' },
-    { id: 6, date: '23rd March, 2024', type: 'Appliance repair', location: 'Iconic Tower, off Ajose Adegun VI, Lagos.', status: 'Cancelled', statusColor: 'bg-[#F9FAFB]', textColor: 'text-[#1D2739]', dueDate: '03/04/2024' },
-  ]);
-
-  </script>
-  
-  <style scoped>
-  /* Additional styling if needed */
-  </style>
-  
+    <main>
+     <section v-if="maintenanceRequests.length && !loading" class="max-w-4xl mx-auto bg-white rounded-lg">
+     <MaintenanceApp />
+     </section>
+     <div v-else-if="!maintenanceRequests.length && loading" class="rounded-md p-4 max-w-4xl mx-auto mt-10">
+         <div class="animate-pulse flex space-x-4">
+           <div class="flex-1 space-y-6 py-1">
+             <div class="h-96 bg-slate-200 rounded"></div>
+           </div>
+         </div>
+       </div>
+     <MaintenanceEmptyState  v-else />
+    </main>
+   </template>
+   
+   <script lang="ts" setup>
+   import { useFetchMaintenanceRequests } from '@/composables/modules/maintenance/useFetchMaintenanceRequests'
+   const { maintenanceRequests, loading } = useFetchMaintenanceRequests()
+   
+   definePageMeta({
+   layout: "dashboard"
+ })
+ 
+   </script>
+   
+   <style scoped>
+   /* Additional styling if needed */
+   </style>
+   

@@ -31,10 +31,28 @@
   
         <div class="flex justify-end space-x-4 pt-14">
           <button @click="$emit('close')" class="px-4 py-3 w-full border-gray-100 border bg-white text-[#292929] rounded-lg text-sm">Cancel</button>
-          <button @click="confirmAction" class="px-4 py-3 w-full rounded-lg" :class="type === 'updateStatus' ? 'bg-gray-900 text-white' : 'bg-[#292929] text-white'">
-            <template v-if="type === 'accept'">Accept</template>
-            <template v-else-if="type === 'decline'">Decline</template>
-            <template v-else-if="type === 'updateStatus'">Update</template>
+  
+          <button
+            @click="confirmAction"
+            class="px-4 py-3 w-full rounded-lg flex items-center justify-center"
+            :class="{
+              'bg-gray-900 text-white': type === 'updateStatus',
+              'bg-[#292929] text-white': type !== 'updateStatus',
+              'cursor-not-allowed opacity-50': isLoading // Disable button while loading
+            }"
+            :disabled="isLoading"
+          >
+            <template v-if="isLoading">
+              <span class="loader"></span> 
+              <span v-if="type === 'accept'">Accepting...</span>
+              <span v-else-if="type === 'decline'">Declining...</span>
+              <span v-else-if="type === 'updateStatus'">Updating...</span>
+            </template>
+            <template v-else>
+              <span v-if="type === 'accept'">Accept</span>
+              <span v-else-if="type === 'decline'">Decline</span>
+              <span v-else-if="type === 'updateStatus'">Update</span>
+            </template>
           </button>
         </div>
       </div>
@@ -42,8 +60,12 @@
   </template>
   
   <script lang="ts" setup>
+  import { useAcceptMaintenenceRequest } from '@/composables/modules/maintenance/useAcceptMaintenanceRequest'
+    import { useDeclineMaintenenceRequest } from '@/composables/modules/maintenance/useRejectMaintenanceRequest'
   import { useCustomToast } from '@/composables/core/useCustomToast'
   const { showToast } = useCustomToast();
+  const { loading: accepting, acceptMaintenenceRequest } = useAcceptMaintenenceRequest()
+  const { loading: declining, declineMaintenenceRequest } = useDeclineMaintenenceRequest()
   import { ref } from 'vue';
   const router = useRouter()
   
@@ -51,34 +73,110 @@
     type: {
       type: String,
       required: true
+    },
+    maintenanceRequest: {
+      type: Object,
+      required: true
     }
   });
   
   const emit = defineEmits(['close']);
   const selectedStatus = ref<string | null>(null);
-  
-  const confirmAction = () => {
-    if (props.type === 'updateStatus' && !selectedStatus.value) {
-        showToast({
-          title: "Error",
-          message: "Please select a status before updating",
-          toastType: "error",
-          duration: 3000
-        });
-      return;
-    }
-    emit('close');
+
+  const confirmAction = async () => {
+  if (props.type === 'updateStatus' && !selectedStatus.value) {
     showToast({
-          title: "Error",
-          message: `${props.type === 'updateStatus' ? `Status updated to ${selectedStatus.value}` : `Request ${props.type}ed`}`,
-          toastType: "error",
-          duration: 3000
-        });
-    router.push('/dashboard/maintenance/invoice')
+      title: "Error",
+      message: "Please select a status before updating",
+      toastType: "error",
+      duration: 3000
+    });
+    return;
+  }
+
+  const actionMap = {
+    accept: () => acceptMaintenenceRequest(props.maintenanceRequest.id),
+    decline: () => declineMaintenenceRequest(props.maintenanceRequest.id),
+    updateStatus: () => Promise.resolve() // No additional async action needed here
   };
+
+  if (actionMap[props.type]) {
+    await actionMap[props.type]();
+  }
+
+  emit('close');
+
+  showToast({
+    title: "Success",
+    message: props.type === 'updateStatus'
+      ? `Status updated to ${selectedStatus.value}`
+      : `Request ${props.type}ed`,
+    toastType: "success",
+    duration: 3000
+  });
+
+  router.push('/dashboard/maintenance/invoice');
+};
+
+
+const isLoading = computed(() =>
+  props.type === 'accept' ? accepting.value :
+  props.type === 'decline' ? declining.value :
+  props.type === 'updateStatus' && updatingStatus.value
+);
+
+  
+  // const confirmAction = async () => {
+  //   if (props.type === 'updateStatus' && !selectedStatus.value) {
+  //       showToast({
+  //         title: "Error",
+  //         message: "Please select a status before updating",
+  //         toastType: "error",
+  //         duration: 3000
+  //       });
+  //     return;
+  //   }
+
+  //   if(props.type === 'accept'){
+  //     await acceptMaintenenceRequest(props.maintenanceRequest.id)
+  //     emit('close');
+  //     router.push('/dashboard/maintenance/invoice')
+  //   } else if (props.type === 'decline') {
+  //     await declineMaintenenceRequest(props.maintenanceRequest.id)
+  //     emit('close');
+  //     router.push('/dashboard/maintenance/invoice')
+  //   } else {
+  //     emit('close');
+  //   showToast({
+  //         title: "Success",
+  //         message: `${props.type === 'updateStatus' ? `Status updated to ${selectedStatus.value}` : `Request ${props.type}ed`}`,
+  //         toastType: "success",
+  //         duration: 3000
+  //       });
+  //   router.push('/dashboard/maintenance/invoice')
+  //   }
+  // };
   </script>
   
   <style scoped>
-  /* Optional additional styling */
+.loader {
+  border: 2px solid #f3f3f3;
+  border-top: 2px solid #292929;
+  border-radius: 50%;
+  width: 1rem;
+  height: 1rem;
+  animation: spin 0.6s linear infinite;
+  margin-right: 0.5rem; /* Space between loader and text */
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
   </style>
   
