@@ -13,7 +13,15 @@ export const maintenance_api = {
         return GATEWAY_ENDPOINT.patch(url)
       },
       $_decline_maintenance_request: (maintenanceRequestId: string) => {
-        let url = `/maintenance-requests/${maintenanceRequestId}/rejected`  
+        let url = `/maintenance-requests/${maintenanceRequestId}/declined`  
         return GATEWAY_ENDPOINT.patch(url)
-      }
+      },
+      $_complete_maintenance_request: (maintenanceRequestId: string) => {
+        let url = `/maintenance-requests/${maintenanceRequestId}/completed`  
+        return GATEWAY_ENDPOINT.patch(url)
+      },
+      $_set_maintenance_request_in_progress: (maintenanceRequestId: string) => {
+        let url = `/maintenance-requests/${maintenanceRequestId}/start`  
+        return GATEWAY_ENDPOINT.patch(url)
+      },
 }

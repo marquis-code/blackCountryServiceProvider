@@ -60,12 +60,16 @@
   </template>
   
   <script lang="ts" setup>
+  import { useCompleteMaintenenceRequest } from '@/composables/modules/maintenance/useCompleteMaintenenceRequest'
+  import { useStartMaintenenceRequest } from '@/composables/modules/maintenance/useSetMaintenenceInProgress'
   import { useAcceptMaintenenceRequest } from '@/composables/modules/maintenance/useAcceptMaintenanceRequest'
     import { useDeclineMaintenenceRequest } from '@/composables/modules/maintenance/useRejectMaintenanceRequest'
   import { useCustomToast } from '@/composables/core/useCustomToast'
   const { showToast } = useCustomToast();
   const { loading: accepting, acceptMaintenenceRequest } = useAcceptMaintenenceRequest()
   const { loading: declining, declineMaintenenceRequest } = useDeclineMaintenenceRequest()
+  const { startMaintenenceRequest, loading: starting } = useStartMaintenenceRequest()
+  const { completeMaintenenceRequest, loading: completing } = useCompleteMaintenenceRequest()
   import { ref } from 'vue';
   const router = useRouter()
   
@@ -97,7 +101,7 @@
   const actionMap = {
     accept: () => acceptMaintenenceRequest(props.maintenanceRequest.id),
     decline: () => declineMaintenenceRequest(props.maintenanceRequest.id),
-    updateStatus: () => Promise.resolve() // No additional async action needed here
+    updateStatus: () => selectedStatus.value === 'In-progress' ? startMaintenenceRequest(props.maintenanceRequest.id) : selectedStatus.value === 'Completed' ?  completeMaintenenceRequest(props.maintenanceRequest.id) :  Promise.resolve() // No additional async action needed here
   };
 
   if (actionMap[props.type]) {
@@ -106,24 +110,37 @@
 
   emit('close');
 
-  showToast({
-    title: "Success",
-    message: props.type === 'updateStatus'
-      ? `Status updated to ${selectedStatus.value}`
-      : `Request ${props.type}ed`,
-    toastType: "success",
-    duration: 3000
-  });
+  // showToast({
+  //   title: "Success",
+  //   message: props.type === 'updateStatus'
+  //     ? `Status updated to ${selectedStatus.value}`
+  //     : `Request ${props.type}ed`,
+  //   toastType: "success",
+  //   duration: 3000
+  // });
 
-  router.push('/dashboard/maintenance/invoice');
+  // router.push('/dashboard/maintenance/invoice');
 };
 
 
-const isLoading = computed(() =>
-  props.type === 'accept' ? accepting.value :
-  props.type === 'decline' ? declining.value :
-  props.type === 'updateStatus' && updatingStatus.value
-);
+// const isLoading = computed(() =>
+//   props.type === 'accept' ? accepting.value :
+//   props.type === 'decline' ? declining.value :
+//   props.type === 'updateStatus' && starting.value
+// );
+
+const isLoading = computed(() => {
+  if (selectedStatus.value === 'In-progress') {
+    return starting.value; // Replace with your actual processing state
+  }
+  if (selectedStatus.value === 'Completed') {
+    return completing.value; // Replace with your actual completing state
+  }
+  return props.type === 'accept' ? accepting.value :
+         props.type === 'decline' ? declining.value :
+         props.type === 'updateStatus' && starting.value;
+});
+
 
   
   // const confirmAction = async () => {
@@ -158,7 +175,7 @@ const isLoading = computed(() =>
   // };
   </script>
   
-  <style scoped>
+<style scoped>
 .loader {
   border: 2px solid #f3f3f3;
   border-top: 2px solid #292929;

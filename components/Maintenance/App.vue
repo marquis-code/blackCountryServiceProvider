@@ -171,6 +171,25 @@ const statusClasses = (status: string) => {
     }
 }
 
+const statusTextMap = (status: string) => {
+    // Convert status to lowercase to handle inconsistent casing
+    switch (status.toLowerCase()) {
+        case 'assigned':
+            return 'new request'
+        case 'accepted':
+            return 'bg-[#E8EDFB] text-[#1D4ED8]'
+        case 'cancelled':
+            return 'bg-[#F9FAFB] text-[#1D2739]'
+        case 'completed':
+            return 'bg-[#E7F6EC] text-[#099137]'
+        case 'declined':
+            return 'bg-[#FBEAE9] text-[#BA110B]'
+        default:
+            return ''
+    }
+}
+
+
 
 // Handle status filter selection
 const handleSelected = (status: string) => {

@@ -16,6 +16,7 @@ export const useAcceptMaintenenceRequest = () => {
                 toastType: "success",
                 duration: 3000
               });
+              window.location.reload();
         } else {
             showToast({
                 title: "Error",
