@@ -201,8 +201,8 @@
           <button @click="updateURL('generate')" type="button" class="p-2 px-6 py-3 bg-gray-200 rounded-md">
             Back
           </button>
-          <button @click="router.push('/dashboard/invoice/success')" type="button" class="p-2 px-6 py-3 text-white bg-[#292929] rounded-md">
-            Confirm
+          <button :disabled="loading" @click="router.push('/dashboard/invoice/success')" type="button" class="p-2 disabled:cursor-not-allowed disabled:opacity-25  px-6 py-3 text-white bg-[#292929] rounded-md">
+           {{ loading ? 'processing..' : 'Confirm' }}
           </button>
         </div>
       </div>
@@ -211,8 +211,10 @@
 </template>
 
 <script lang="ts" setup>
+import { useGenerateInvoive } from '@/composables/modules/maintenance/useGenerateInvoice'
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
+const { generateInvoice, loading, invoicePayload, setPayload } = useGenerateInvoive()
 
 const router = useRouter();
 const route = useRoute();
@@ -280,7 +282,46 @@ const proceedToPreview = () => {
 
 const emit = defineEmits(['success'])
 
+
+
+// const handleSubmit = () => {
+//   const payload = {
+//     billFrom: formData.value.billFrom, 
+//     billTo: formData.value.billTo,
+//     issuedOn: formData.value.issuedOn,
+//     dueOn: formData.value.dueOn,
+//     items: [],
+//     note: formData.value.note,
+//     grandTotal: '',
+//   }
+//   setPayload(payload)
+//   generateInvoice()
+//   emit('success')
+// };
+
 const handleSubmit = () => {
-  emit('success')
+  const itemsWithTotal = formData.value.items.map(item => ({
+    description: item.name,
+    price: item.price,
+    quantity: item.quantity,
+    totalAmount: item.price * item.quantity,
+  }));
+
+  const grandTotal = itemsWithTotal.reduce((sum, item) => sum + item.totalAmount, 0);
+
+  const payload = {
+    billFrom: formData.value.billFrom,
+    billTo: formData.value.billTo,
+    issuedOn: formData.value.issuedOn,
+    dueOn: formData.value.dueOn,
+    items: itemsWithTotal,
+    note: formData.value.note,
+    grandTotal,
+  };
+
+  setPayload(payload);
+  generateInvoice();
+  emit('success');
 };
+
 </script>

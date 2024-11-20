@@ -26,19 +26,7 @@
             {{ maintenanceRequest?.status ?? 'Nil' }}
           </span>
         </div>
-        <!-- <div class="flex items-center space-x-3">
-          <button v-if="maintenanceRequest?.status === 'accepted' || maintenanceRequest?.status === 'in_progress'"
-            @click="openModal('updateStatus')"
-            class="px-4 py-3 text-white text-sm bg-[#292929] font-medium rounded-lg">Update Status</button>
-            <button @click="router.push(`/dashboard/maintenance/invoice?invoiceId=${route?.params?.id}`)"  v-if="maintenanceRequest?.status === 'completed'"
-            class="px-4 py-3 text-white text-sm bg-[#292929] font-medium rounded-lg">Generate invoice</button>
-          <div class="flex items-center space-x-3" v-else>
-            <button @click="openModal('accept')"
-              class="px-4 py-3 text-white text-sm bg-[#292929] font-medium rounded-lg">Accept</button>
-            <button @click="openModal('decline')"
-              class="px-4 py-3 text-[#1D192B] text-sm bg-[#EBE5E0] font-medium rounded-lg">Decline</button>
-          </div>
-        </div> -->
+ 
         <div class="flex items-center space-x-3">
   <!-- Update Status Button -->
   <button 

@@ -24,4 +24,8 @@ export const maintenance_api = {
         let url = `/maintenance-requests/${maintenanceRequestId}/start`  
         return GATEWAY_ENDPOINT.patch(url)
       },
+      $_generate_invoice: (maintenanceRequestId: string, payload: any) => {
+        let url = `/maintenance-requests/${maintenanceRequestId}/invoices`  
+        return GATEWAY_ENDPOINT.post(url, payload)
+      }
 }
