@@ -201,7 +201,7 @@
           <button @click="updateURL('generate')" type="button" class="p-2 px-6 py-3 bg-gray-200 rounded-md">
             Back
           </button>
-          <button :disabled="loading" @click="router.push('/dashboard/invoice/success')" type="button" class="p-2 disabled:cursor-not-allowed disabled:opacity-25  px-6 py-3 text-white bg-[#292929] rounded-md">
+          <button :disabled="loading" @click="handleSubmit" type="button" class="p-2 disabled:cursor-not-allowed disabled:opacity-25  px-6 py-3 text-white bg-[#292929] rounded-md">
            {{ loading ? 'processing..' : 'Confirm' }}
           </button>
         </div>
@@ -299,7 +299,7 @@ const emit = defineEmits(['success'])
 //   emit('success')
 // };
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   const itemsWithTotal = formData.value.items.map(item => ({
     description: item.name,
     price: item.price,
@@ -320,8 +320,9 @@ const handleSubmit = () => {
   };
 
   setPayload(payload);
-  generateInvoice();
+  await generateInvoice();
   emit('success');
+  // router.push('/dashboard/invoice/success')
 };
 
 </script>
