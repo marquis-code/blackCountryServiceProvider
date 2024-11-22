@@ -11,6 +11,6 @@ definePageMeta({
 })
 
 const handleRedirection = () => {
-   router.push('/dashboard/invoice/success')
+  //  router.push('/dashboard/invoice/success')
  }
 </script>

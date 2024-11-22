@@ -27,5 +27,9 @@ export const maintenance_api = {
       $_generate_invoice: (maintenanceRequestId: string, payload: any) => {
         let url = `/maintenance-requests/${maintenanceRequestId}/invoices`  
         return GATEWAY_ENDPOINT.post(url, payload)
+      },
+      $_fetch_invoices: () => {
+        let url = `/maintenance-requests/invoices`  
+        return GATEWAY_ENDPOINT.get(url)
       }
 }

@@ -19,7 +19,7 @@ export const useGenerateInvoive = () => {
     loading.value = true;
 
     const res = (await maintenance_api.$_generate_invoice(
-      route.params.id, invoicePayload
+      route.query.invoiceId, invoicePayload.value
     )) as any;
 
     if (res.type !== "ERROR") {
@@ -29,7 +29,8 @@ export const useGenerateInvoive = () => {
         toastType: "success",
         duration: 3000,
       });
-      window.location.reload();
+      window.location.href = "/dashboard/invoice/success";
+      // router.push('/dashboard/invoice/success')
     } else {
       showToast({
         title: "Error",

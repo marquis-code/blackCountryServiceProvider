@@ -300,7 +300,7 @@ const emit = defineEmits(['success'])
 // };
 
 const handleSubmit = async () => {
-  const itemsWithTotal = formData.value.items.map(item => ({
+  const itemsWithTotal = items.value.map(item => ({
     description: item.name,
     price: item.price,
     quantity: item.quantity,
