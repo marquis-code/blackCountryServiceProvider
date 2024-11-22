@@ -46,7 +46,7 @@
 
   <!-- Accept and Decline Buttons -->
   <div 
-    v-else-if="maintenanceRequest?.status !== 'in_progress' && maintenanceRequest?.status !== 'completed' && maintenanceRequest?.status !== 'accepted'"
+    v-else-if="maintenanceRequest?.status !== 'in_progress' && maintenanceRequest?.status !== 'completed' && maintenanceRequest?.status !== 'accepted' && maintenanceRequest?.status !== 'declined'"
     class="flex items-center space-x-3">
     <button 
       @click="openModal('accept')"
@@ -152,7 +152,8 @@ const colorMapGenerator = (color) => {
     'in_progress': 'text-[#DD900D] bg-[#FEF6E7]',
     'completed': 'text-[#099137] bg-[#E7F6EC]',
     'accepted': 'text-[#1D4ED8] bg-[#E8EDFB]',
-    'assigned': 'text-[#1D2739] bg-[#F9FAFB]'
+    'assigned': 'text-[#1D2739] bg-[#F9FAFB]',
+    'declined': 'bg-[#FBEAE9] text-[#BA110B]'
   }
 
   return colorMap[color] || '';

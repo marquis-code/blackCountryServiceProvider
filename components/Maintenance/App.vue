@@ -107,7 +107,7 @@
 </template>
 
 
-<script lang="ts" setup>
+<!-- <script lang="ts" setup>
 import { useFetchMaintenanceRequests } from '@/composables/modules/maintenance/useFetchMaintenanceRequests'
 import { ref, computed } from 'vue'
 const { maintenanceRequests, loading } = useFetchMaintenanceRequests()
@@ -195,11 +195,81 @@ const statusTextMap = (status: string) => {
 const handleSelected = (status: string) => {
     selectedStatus.value = status
 }
+</script> -->
+
+
+
+<script setup lang="ts">
+import { useFetchMaintenanceRequests } from '@/composables/modules/maintenance/useFetchMaintenanceRequests'
+import { ref, computed } from 'vue'
+const { maintenanceRequests, loading } = useFetchMaintenanceRequests()
+const router = useRouter()
+
+// State to store selected status filter
+const selectedStatus = ref<string>('All requests')
+
+// Format backend data into a format compatible with frontend display
+const requests = computed(() =>
+    maintenanceRequests.value.map((req) => ({
+        ...req,
+        id: req.id,
+        type: req.type,
+        date: new Date(req.createdAt).toISOString().split('T')[0],
+        status: req.status.charAt(0).toUpperCase() + req.status.slice(1), // Capitalize status
+    }))
+)
+
+// Extract unique dates from requests and sort them in descending order
+const requestDates = computed(() =>
+    [...new Set(requests.value.map((req) => req.date))].sort((a, b) => new Date(b).getTime() - new Date(a).getTime())
+)
+
+const handleSelectedRequest = (item: any) => {
+    router.push(`/dashboard/maintenance/${item.id}`)
+}
+
+// Filter requests based on selected status and date, and sort by the most recent
+const filteredRequestsByStatus = (date: string) => {
+    return requests.value
+        .filter(
+            (req) =>
+                req.date === date && (selectedStatus.value === 'All requests' || req.status === selectedStatus.value)
+        )
+        .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+}
+
+// Format date to a readable format
+const formatDate = (date: string) =>
+    new Date(date).toLocaleDateString('en-US', {
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric',
+    })
+
+// Class styles based on request status
+const statusClasses = (status: string) => {
+    switch (status.toLowerCase()) {
+        case 'assigned':
+            return 'bg-[#FEF6E7] text-[#DD900D]'
+        case 'accepted':
+            return 'bg-[#E8EDFB] text-[#1D4ED8]'
+        case 'cancelled':
+            return 'bg-[#F9FAFB] text-[#1D2739]'
+        case 'completed':
+            return 'bg-[#E7F6EC] text-[#099137]'
+        case 'declined':
+            return 'bg-[#FBEAE9] text-[#BA110B]'
+        default:
+            return ''
+    }
+}
+
+// Handle status filter selection
+const handleSelected = (status: string) => {
+    selectedStatus.value = status
+}
+
 </script>
-
-
-
-
 <style scoped>
 .empty-state-icon {
     width: 5rem;
