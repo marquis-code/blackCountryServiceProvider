@@ -1,7 +1,13 @@
 import { GATEWAY_ENDPOINT } from '../axios.config'
 export const maintenance_api = {
-      $_fetch_maitenence_requests: (id: string) => {
-        let url = `/service-providers/${id}/maintenance-requests`  
+      $_fetch_maitenence_requests: (id: string, page = 1, perPage = 100000, status = '') => {
+        let url = `/service-providers/${id}/maintenance-requests?page=${page}&perPage=${perPage}`  
+
+          // Add search query to the URL if provided
+            if (status) {
+              url += `&status=${status}`
+          }
+
         return GATEWAY_ENDPOINT.get(url)
       },
       $_fetch_maitenence_request: (id: string) => {
@@ -28,8 +34,8 @@ export const maintenance_api = {
         let url = `/maintenance-requests/${maintenanceRequestId}/invoices`  
         return GATEWAY_ENDPOINT.post(url, payload)
       },
-      $_fetch_invoices: () => {
-        let url = `/maintenance-requests/invoices`  
+      $_fetch_invoices: (id: string, page = 1, perPage = 100000) => {
+        let url = `/service-providers/${id}/invoices?page=${page}&perPage=${perPage}`  
         return GATEWAY_ENDPOINT.get(url)
       }
 }

@@ -1,5 +1,5 @@
 <template>
-    <div class="max-w-4xl mx-auto mt-6">
+    <div class="max-w-7xl mx-auto mt-6">
       <div class="overflow-hidden border-[0.5px] border-gray-100 bg-white rounded-lg">
         <table class="min-w-full bg-white">
           <thead>
@@ -15,12 +15,12 @@
           <tbody>
             <tr v-for="invoice in invoices" :key="invoice.id" class="border-t border-gray-25">
               <td class="px-4 py-6 text-[#667185] font-light text-sm">#{{ invoice.id }}</td>
-              <td class="px-4 py-6 text-[#667185] font-light text-sm">{{ invoice.recipient }}</td>
-              <td class="px-4 py-6 text-[#667185] font-light text-sm">{{ invoice.amount }}</td>
-              <td class="px-4 py-6 text-[#667185] font-light text-sm">{{ invoice.date }}</td>
+              <td class="px-4 py-6 text-[#667185] font-light text-sm">{{ invoice?.billTo ?? 'Nil' }}</td>
+              <td class="px-4 py-6 text-[#667185] font-light text-sm">{{ formatCurrency(invoice?.grandTotal) ?? 'Nil' }}</td>
+              <td class="px-4 py-6 text-[#667185] font-light text-sm">{{ moment(invoice?.createdAt).format('DD MMM YYYY') }}</td>
               <td class="px-4 py-6">
                 <span :class="invoice.status === 'Paid' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'" class="px-4 py-2 text-xs font-semibold rounded-full">
-                  {{ invoice.status }}
+                  {{ invoice.status ?? 'Nil' }}
                 </span>
               </td>
               <td class="px-4  py-3.5 text-green-700">
@@ -41,10 +41,17 @@
   </template>
   
   <script setup lang="ts">
+  import { useCurrencyFormatter } from '@/composables/core/useCurrencyFormatter'
+  const { formatCurrency } = useCurrencyFormatter()
+   import moment from 'moment';
   const props = defineProps({
     invoices: {
       type: Array
     }
   })
+
+//   const formatCurrency = (amount: number) => {
+//   return amount.toLocaleString('en-GB')
+// }
   </script>
   

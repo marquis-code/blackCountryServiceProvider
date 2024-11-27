@@ -4,6 +4,7 @@
             <div class="p-4 min-h-screen space-y-4">
                 <h1 class="text-xl font-medium py-3 text-[#1D2739]">Maintenance</h1>
                 <MaintenanceHeaderActions @selected="handleSelected" />
+                <!-- {{ requests }} -->
 
                 <div v-if="!requestDates.some(date => filteredRequestsByStatus(date).length > 0) && !loading"
                     class="flex flex-col items-center mt-20 text-gray-500 border-[0.5px] border-gray-100 py-20 rounded-lg">
@@ -208,6 +209,17 @@ const router = useRouter()
 // State to store selected status filter
 const selectedStatus = ref<string>('All requests')
 
+// const statusMap: { [key: string]: string } = {
+//     pending: 'Pending',
+//     accepted: 'Accepted',
+//     in_progress: 'In Progress',
+//     completed: 'Completed',
+//     cancelled: 'Cancelled',
+//     declined: 'Declined',
+//     archived: 'Archived',
+// };
+
+
 // Format backend data into a format compatible with frontend display
 const requests = computed(() =>
     maintenanceRequests.value.map((req) => ({
@@ -218,6 +230,16 @@ const requests = computed(() =>
         status: req.status.charAt(0).toUpperCase() + req.status.slice(1), // Capitalize status
     }))
 )
+
+// const requests = computed(() =>
+//     maintenanceRequests.value.map((req) => ({
+//         ...req,
+//         id: req.id,
+//         type: req.type,
+//         date: new Date(req.createdAt).toISOString().split('T')[0],
+//         status: statusMap[req.status] || req.status, // Map backend status to display status
+//     }))
+// );
 
 // Extract unique dates from requests and sort them in descending order
 const requestDates = computed(() =>
@@ -237,6 +259,31 @@ const filteredRequestsByStatus = (date: string) => {
         )
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
 }
+
+// const filteredRequestsByStatus = (date: string) => {
+//     // Define a mapping of display statuses to backend statuses
+//     const statusMap: { [key: string]: string } = {
+//         'Pending': 'pending',
+//         'Accepted': 'accepted',
+//         'In Progress': 'in_progress',
+//         'Completed': 'completed',
+//         'Cancelled': 'cancelled',
+//         'Declined': 'declined',
+//         'Archived': 'archived',
+//     };
+
+//     // Get the backend status equivalent of the selected status
+//     const mappedStatus = statusMap[selectedStatus.value] || selectedStatus.value;
+
+//     return requests.value
+//         .filter(
+//             (req) =>
+//                 req.date === date &&
+//                 (selectedStatus.value === 'All requests' || req.status === mappedStatus)
+//         )
+//         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+// };
+
 
 // Format date to a readable format
 const formatDate = (date: string) =>

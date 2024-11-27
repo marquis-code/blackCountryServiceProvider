@@ -20,10 +20,12 @@
 </template>
 
 <script lang="ts" setup>
+import { useFetchMaintenanceRequests } from '@/composables/modules/maintenance/useFetchMaintenanceRequests'
+const { queryObj } = useFetchMaintenanceRequests()
 import { ref } from 'vue';
 
 // Define the tab options
-const options = ['All requests', 'Accepted', 'Pending', 'Completed', 'Declined', 'In Progress', 'Archived'];
+const options = ['All requests', 'Accepted', 'Pending', 'Completed', 'Declined', 'in_progress', 'Archived'];
 const selectedOption = ref(options[0]); // Set default selected option
 
 // Emit event when an option is selected
@@ -31,7 +33,21 @@ const emit = defineEmits(['selected']);
 
 const selectOption = (option: string) => {
   selectedOption.value = option;
-  emit('selected', option); // Emit the selected option to parent component
+  if(option !== 'All requests'){
+    const statusMap: { [key: string]: string } = {
+        Pending: 'pending',
+        Accepted: 'accepted',
+        'in_progress': 'in_progress',
+        Completed: 'completed',
+        Cancelled: 'cancelled',
+        Declined: 'declined',
+        Archived: 'archived'
+      };
+      queryObj.value.status = statusMap[option] || 'pending';
+  } else {
+    queryObj.value.status = ''
+  }
+  emit('selected', option);
 };
 </script>
 
