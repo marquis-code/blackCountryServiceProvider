@@ -37,5 +37,9 @@ export const maintenance_api = {
       $_fetch_invoices: (id: string, page = 1, perPage = 100000) => {
         let url = `/service-providers/${id}/invoices?page=${page}&perPage=${perPage}`  
         return GATEWAY_ENDPOINT.get(url)
+      },
+      $_mark_as_paid: (id: any) => {
+        let url = `/invoices/${id}/paid`  
+        return GATEWAY_ENDPOINT.patch(url)
       }
 }

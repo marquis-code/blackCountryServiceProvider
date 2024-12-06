@@ -4,45 +4,11 @@
             <div class="p-4 min-h-screen space-y-4">
                 <h1 class="text-xl font-medium py-3 text-[#1D2739]">Maintenance</h1>
                 <MaintenanceHeaderActions @selected="handleSelected" />
-                <!-- {{ requests }} -->
 
                 <div v-if="!requestDates.some(date => filteredRequestsByStatus(date).length > 0) && !loading"
                     class="flex flex-col items-center mt-20 text-gray-500 border-[0.5px] border-gray-100 py-20 rounded-lg">
                     <div class="flex items-center justify-center mb-4">
-                        <svg width="152" height="124" viewBox="0 0 152 124" fill="none"
-                            xmlns="http://www.w3.org/2000/svg">
-                            <circle cx="76" cy="58" r="52" fill="#EAEAEA" />
-                            <circle cx="21" cy="25" r="5" fill="#BDBDBD" />
-                            <circle cx="18" cy="109" r="7" fill="#BDBDBD" />
-                            <circle cx="145" cy="41" r="7" fill="#BDBDBD" />
-                            <circle cx="134" cy="14" r="4" fill="#BDBDBD" />
-                            <g filter="url(#filter0_b_6053_208442)">
-                                <rect x="52" y="34" width="48" height="48" rx="24" fill="#9D9D9D" />
-                                <path
-                                    d="M83 51C83.3437 51.0502 83.6777 51.113 84 51.1874C84.5912 51.324 84.8868 51.3923 85.241 51.6749C85.443 51.8361 85.6952 52.1552 85.8059 52.3897C86 52.801 86 53.1998 86 53.9974V64.8599C86 65.853 84.96 66.5351 84 66.3134C83.0803 66.1009 82.0659 65.9832 81 65.9832C79.0829 65.9832 77.3325 66.364 76 66.9916C74.6675 67.6192 72.9171 68 71 68C69.9341 68 68.9197 67.8823 68 67.6699C67.4088 67.5333 67.1132 67.465 66.759 67.1824C66.557 67.0212 66.3048 66.7021 66.1941 66.4676C66 66.0563 66 65.6575 66 64.8599V53.9974C66 53.0043 67.04 52.3222 68 52.544C68.3223 52.6184 68.6563 52.6812 69 52.7314"
-                                    stroke="white" stroke-width="2" stroke-linecap="round" />
-                                <path
-                                    d="M78.5 59.5C78.5 60.8807 77.3807 62 76 62C74.6193 62 73.5 60.8807 73.5 59.5C73.5 58.1193 74.6193 57 76 57C77.3807 57 78.5 58.1193 78.5 59.5Z"
-                                    stroke="white" stroke-width="1.5" />
-                                <path d="M69.5 60.5V60.509" stroke="white" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                                <path d="M82.5 58.4922V58.5012" stroke="white" stroke-width="2" stroke-linecap="round"
-                                    stroke-linejoin="round" />
-                                <path d="M76 48V52M72 51V53M80 49V51" stroke="white" stroke-width="1.5"
-                                    stroke-linecap="round" />
-                            </g>
-                            <defs>
-                                <filter id="filter0_b_6053_208442" x="44" y="26" width="64" height="64"
-                                    filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
-                                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
-                                    <feGaussianBlur in="BackgroundImageFix" stdDeviation="4" />
-                                    <feComposite in2="SourceAlpha" operator="in"
-                                        result="effect1_backgroundBlur_6053_208442" />
-                                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_backgroundBlur_6053_208442"
-                                        result="shape" />
-                                </filter>
-                            </defs>
-                        </svg>
+                    <img src="@/assets/icons/maintenance-empty-state.svg" />
 
                     </div>
                     <p>No {{ selectedStatus  }} Maintenence request available </p>
@@ -69,15 +35,7 @@
                                     <div class="space-y-1">
                                         <h4 class="text-[#1D2739] text-sm">{{ request.type }}</h4>
                                         <p class="flex items-center text-sm gap-x-2">
-                                            <svg width="14" height="15" viewBox="0 0 14 15" fill="none"
-                                                xmlns="http://www.w3.org/2000/svg">
-                                                <path
-                                                    d="M7.94366 12.9642C7.69072 13.201 7.35257 13.3334 7.00064 13.3334C6.64872 13.3334 6.31062 13.201 6.05762 12.9642C3.74093 10.7819 0.636277 8.34411 2.15032 4.80488C2.96895 2.89126 4.93403 1.66675 7.00064 1.66675C9.06727 1.66675 11.0323 2.89126 11.851 4.80488C13.3631 8.33967 10.2661 10.7894 7.94366 12.9642Z"
-                                                    fill="#5B8469" stroke="#5B8469" />
-                                                <path
-                                                    d="M9.04036 6.91667C9.04036 8.04425 8.12628 8.95833 6.9987 8.95833C5.87111 8.95833 4.95703 8.04425 4.95703 6.91667C4.95703 5.78908 5.87111 4.875 6.9987 4.875C8.12628 4.875 9.04036 5.78908 9.04036 6.91667Z"
-                                                    fill="white" stroke="#5B8469" />
-                                            </svg>
+                                            <img src="@/assets/icons/location.svg" />
 
                                             {{ request.house.address ??= 'Nil' }}
                                         </p>
@@ -108,98 +66,6 @@
 </template>
 
 
-<!-- <script lang="ts" setup>
-import { useFetchMaintenanceRequests } from '@/composables/modules/maintenance/useFetchMaintenanceRequests'
-import { ref, computed } from 'vue'
-const { maintenanceRequests, loading } = useFetchMaintenanceRequests()
-const router = useRouter()
-
-// State to store selected status filter
-const selectedStatus = ref<string>('All requests')
-
-// Format backend data into a format compatible with frontend display
-const requests = computed(() =>
-    maintenanceRequests.value.map((req) => ({
-        ...req,
-        id: req.id,
-        type: req.type,
-        date: new Date(req.createdAt).toISOString().split('T')[0],
-        status: req.status.charAt(0).toUpperCase() + req.status.slice(1), // Capitalize status
-    }))
-)
-
-// Extract unique dates from requests and sort them
-const requestDates = computed(() =>
-    [...new Set(requests.value.map((req) => req.date))].sort()
-)
-
-const handleSelectedRequest = (item: any) => {
-    router.push(`/dashboard/maintenance/${item.id}`)
-}
-
-// Filter requests based on selected status and date
-const filteredRequestsByStatus = (date: string) => {
-    return requests.value.filter((req) =>
-        req.date === date && (selectedStatus.value === 'All requests' || req.status === selectedStatus.value)
-    )
-}
-
-// Format date to a readable format
-const formatDate = (date: string) =>
-    new Date(date).toLocaleDateString('en-US', {
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric',
-    })
-
-// Class styles based on request status
-// Class styles based on request status
-const statusClasses = (status: string) => {
-    // Convert status to lowercase to handle inconsistent casing
-    switch (status.toLowerCase()) {
-        case 'assigned':
-            return 'bg-[#FEF6E7] text-[#DD900D]'
-        case 'accepted':
-            return 'bg-[#E8EDFB] text-[#1D4ED8]'
-        case 'cancelled':
-            return 'bg-[#F9FAFB] text-[#1D2739]'
-        case 'completed':
-            return 'bg-[#E7F6EC] text-[#099137]'
-        case 'declined':
-            return 'bg-[#FBEAE9] text-[#BA110B]'
-        default:
-            return ''
-    }
-}
-
-const statusTextMap = (status: string) => {
-    // Convert status to lowercase to handle inconsistent casing
-    switch (status.toLowerCase()) {
-        case 'assigned':
-            return 'new request'
-        case 'accepted':
-            return 'bg-[#E8EDFB] text-[#1D4ED8]'
-        case 'cancelled':
-            return 'bg-[#F9FAFB] text-[#1D2739]'
-        case 'completed':
-            return 'bg-[#E7F6EC] text-[#099137]'
-        case 'declined':
-            return 'bg-[#FBEAE9] text-[#BA110B]'
-        default:
-            return ''
-    }
-}
-
-
-
-// Handle status filter selection
-const handleSelected = (status: string) => {
-    selectedStatus.value = status
-}
-</script> -->
-
-
-
 <script setup lang="ts">
 import { useFetchMaintenanceRequests } from '@/composables/modules/maintenance/useFetchMaintenanceRequests'
 import { ref, computed } from 'vue'
@@ -209,16 +75,6 @@ const router = useRouter()
 // State to store selected status filter
 const selectedStatus = ref<string>('All requests')
 
-// const statusMap: { [key: string]: string } = {
-//     pending: 'Pending',
-//     accepted: 'Accepted',
-//     in_progress: 'In Progress',
-//     completed: 'Completed',
-//     cancelled: 'Cancelled',
-//     declined: 'Declined',
-//     archived: 'Archived',
-// };
-
 
 // Format backend data into a format compatible with frontend display
 const requests = computed(() =>
@@ -231,15 +87,6 @@ const requests = computed(() =>
     }))
 )
 
-// const requests = computed(() =>
-//     maintenanceRequests.value.map((req) => ({
-//         ...req,
-//         id: req.id,
-//         type: req.type,
-//         date: new Date(req.createdAt).toISOString().split('T')[0],
-//         status: statusMap[req.status] || req.status, // Map backend status to display status
-//     }))
-// );
 
 // Extract unique dates from requests and sort them in descending order
 const requestDates = computed(() =>
@@ -253,36 +100,10 @@ const handleSelectedRequest = (item: any) => {
 // Filter requests based on selected status and date, and sort by the most recent
 const filteredRequestsByStatus = (date: string) => {
     return requests.value
-        .filter(
-            (req) =>
-                req.date === date && (selectedStatus.value === 'All requests' || req.status === selectedStatus.value)
-        )
+        .filter((req) => req.date === date && (selectedStatus.value === 'All requests' || req.status === selectedStatus.value))
         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
 }
 
-// const filteredRequestsByStatus = (date: string) => {
-//     // Define a mapping of display statuses to backend statuses
-//     const statusMap: { [key: string]: string } = {
-//         'Pending': 'pending',
-//         'Accepted': 'accepted',
-//         'In Progress': 'in_progress',
-//         'Completed': 'completed',
-//         'Cancelled': 'cancelled',
-//         'Declined': 'declined',
-//         'Archived': 'archived',
-//     };
-
-//     // Get the backend status equivalent of the selected status
-//     const mappedStatus = statusMap[selectedStatus.value] || selectedStatus.value;
-
-//     return requests.value
-//         .filter(
-//             (req) =>
-//                 req.date === date &&
-//                 (selectedStatus.value === 'All requests' || req.status === mappedStatus)
-//         )
-//         .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-// };
 
 
 // Format date to a readable format
@@ -306,6 +127,8 @@ const statusClasses = (status: string) => {
             return 'bg-[#E7F6EC] text-[#099137]'
         case 'declined':
             return 'bg-[#FBEAE9] text-[#BA110B]'
+        case 'in_progress':
+            return 'bg-[#FBEAE9] text-[#BA110B]'
         default:
             return ''
     }
@@ -313,6 +136,7 @@ const statusClasses = (status: string) => {
 
 // Handle status filter selection
 const handleSelected = (status: string) => {
+    console.log(status, 'selected status here')
     selectedStatus.value = status
 }
 
@@ -322,4 +146,4 @@ const handleSelected = (status: string) => {
     width: 5rem;
     height: 5rem;
 }
-</style>
+</style> 

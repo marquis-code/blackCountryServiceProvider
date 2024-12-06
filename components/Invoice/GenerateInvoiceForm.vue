@@ -182,6 +182,60 @@
             ></textarea>
           </div>
 
+        <section>
+          <h4 class="text-lg font-medium text-sm" >Payment Details</h4>
+
+          <div class="mt-6 space-y-4">
+                <div class="relative">
+                <label class="block font-medium text-[#1D2739] text-xs">Bank Name</label>
+                <select
+                  v-if="!fetchingBanks"
+                  v-model="selectedBank"
+                  @change="handleBankSelection"
+                  class="w-full p-2 mt-1 outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4"
+                >
+                  <option v-for="(bank, idx) in banksList" :key="idx" :value="bank">{{ bank.name }}</option>
+                </select>
+  
+                <div v-else class="animate-pulse flex space-x-4">
+                    <div class="rounded-md bg-slate-200 h-14 w-full"></div>
+                </div>
+  
+              </div>
+
+              <div class="relative">
+                <label class="block font-medium text-[#1D2739] text-xs">Account Number</label>
+                <input
+                  v-model="payload.accountNumber"
+                  type="text"
+                  :disabled="!selectedBank?.name"
+                  @blur="validateAccountNumber"
+                  class="w-full p-2 mt-1 outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4"
+                />
+                <span v-if="accountNumberError" class="text-red-500 text-base">{{ accountNumberError }}</span>
+              </div>
+    
+              <div v-if="payload.accountName && !resolvingBankInfo" class="relative">
+                <label class="block font-medium text-[#1D2739] text-xs">Account Name</label>
+                <div class="flex items-center space-x-2">
+                  <input
+                    readonly
+                    disabled
+                    type="text"
+                    :value="payload.accountName"
+                    class="w-full p-2 mt-1 outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4"
+                  />
+                </div>
+              </div>
+
+              <!-- <div v-if="resolvingBankInfo">
+                <div
+                class="rounded-md h-16 bg-gray-100 animate-pulse p-4 w-full mx-auto mt-10"
+                ></div>
+              </div> -->
+            </div>
+        </section>
+
           <!-- Form Navigation Buttons -->
           <div class="flex justify-between items-center gap-4 pt-10">
             <button @click="router.push('/dashboard/invoice')" type="button" class="p-2 px-6 py-3 bg-gray-200 rounded-md">
@@ -208,13 +262,70 @@
       </div>
     </div>
   </section>
+  <CoreFullScreenLoader :visible="resolvingBankInfo" text="Resolving account number....." />
 </template>
 
 <script lang="ts" setup>
+import { useFetchNigerianBanks } from '@/composables/modules/banks/useFetchNigerianBanks'
+  import { useResolveBank } from '@/composables/modules/banks/useResolveBanks'
 import { useGenerateInvoive } from '@/composables/modules/maintenance/useGenerateInvoice'
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 const { generateInvoice, loading, invoicePayload, setPayload } = useGenerateInvoive()
+
+const { loading: fetchingBanks, banksList } = useFetchNigerianBanks()
+const { resolveBank, resolvingBankInfo, bankObj } = useResolveBank()
+
+
+const payload = ref({
+    accountNumber: "",
+    bankName: "",
+    bankSortCode: "",
+    accountName: ""
+  })
+
+const accountNumberError = ref<string | null>(null)
+  const isAccountNumberValid = ref(false)
+  const selectedBank = ref(null)
+
+    // Function to validate account number
+    const validateAccountNumber = () => {
+    const accountNumberRegex = /^[0-9]{10}$/ // Sample regex for a 10-digit account number
+    isAccountNumberValid.value = accountNumberRegex.test(payload.value.accountNumber)
+    accountNumberError.value = isAccountNumberValid.value ? null : 'Invalid account number'
+  }
+  
+  // Watcher to check account number validity
+  watch(() => payload.value.accountNumber, validateAccountNumber)
+
+  // Function to handle bank selection and update payload with bank details
+  const handleBankSelection = () => {
+    console.log(selectedBank.value, 'here selected')
+    if (selectedBank.value) {
+      payload.value.bankSortCode = selectedBank.value.sortCode
+      payload.value.bankName = selectedBank.value.name
+    //   resolveAccount()
+    }
+  }
+
+  watch(isAccountNumberValid, (val) => {
+    console.log(val, 'here')
+    if(val){
+        resolveAccount()
+    }
+  })
+
+    // Function to resolve account owner based on bank and account number
+    const resolveAccount = async () => {
+    if (isAccountNumberValid.value && payload.value.bankSortCode) {
+      try {
+        const accountOwner = await resolveBank(payload.value.accountNumber, payload.value.bankSortCode)
+        payload.value.accountName = accountOwner.data.accountName // Assuming the response has 'accountName'
+      } catch (error) {
+        accountNumberError.value = 'Failed to resolve account. Please try again.'
+      }
+    }
+  }
 
 const router = useRouter();
 const route = useRoute();

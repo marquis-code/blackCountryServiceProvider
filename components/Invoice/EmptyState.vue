@@ -1,9 +1,8 @@
 <!-- Invoice.vue -->
 <template>
-  <div class="p-6 max-w-4xl mx-auto">
-    <h1 class="text-xl font-semibold text-[#1D2739]">Invoice</h1>
-    <InvoiceSearch />
-    <InvoicePlaceholder v-if="!invoices.length" />
+  <div class="p-6 max-w-6xl mx-auto">
+    <!-- <h1 class="text-xl font-semibold text-[#1D2739]">Invoice</h1> -->
+    <!-- <InvoiceSearch /> -->
     <InvoiceList v-if="invoices.length && !loading" :invoices="invoices" />
     <section v-else-if="loading && !invoices.length">
         <div class="rounded-md p-4 w-full mx-auto">
@@ -14,6 +13,7 @@
           </div>
         </div>
        </section>
+       <InvoicePlaceholder v-else />
   </div> 
 </template>
 <script setup lang="ts">
