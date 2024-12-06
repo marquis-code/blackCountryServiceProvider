@@ -420,7 +420,7 @@ const handleSubmit = async () => {
 
   const grandTotal = itemsWithTotal.reduce((sum, item) => sum + item.totalAmount, 0);
 
-  const payload = {
+  const payloadObj = {
     billFrom: formData.value.billFrom,
     billTo: formData.value.billTo,
     issuedOn: formData.value.issuedOn,
@@ -428,9 +428,13 @@ const handleSubmit = async () => {
     items: itemsWithTotal,
     note: formData.value.note,
     grandTotal,
+    accountName: payload.value.accountNumber,
+    accountNumber: payload.value.accountNumber,
+    bankSortCode: payload.value.accountNumber,
+    bankName: payload.value.accountNumber
   };
 
-  setPayload(payload);
+  setPayload(payloadObj);
   await generateInvoice();
   emit('success');
   // router.push('/dashboard/invoice/success')

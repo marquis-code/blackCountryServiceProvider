@@ -41,5 +41,9 @@ export const maintenance_api = {
       $_mark_as_paid: (id: any) => {
         let url = `/invoices/${id}/paid`  
         return GATEWAY_ENDPOINT.patch(url)
+      },
+      $_batch_mark_as_paid: (payload: any) => {
+        let url = `/invoices/paid/batch`  
+        return GATEWAY_ENDPOINT.patch(url, payload)
       }
 }

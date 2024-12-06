@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { useBatchMarkAsPaid } from '@/composables/modules/maintenance/useBatchMarkInvoiceAsPaid'
+const { setPayloadObj, batchMarkAsPaid, loading: processing } = useBatchMarkAsPaid()
 import { useMarkAsPaid } from '@/composables/modules/maintenance/useMarkAsPaid'
   // const { formatCurrency } = useCurrencyFormatter()
   const {  markAsPaid: handleMarkInvoiceAsPaid, loading } = useMarkAsPaid()
@@ -119,17 +121,32 @@ const proceedToMarkAsPaid = async () => {
 
 }
 
-const markAsPaid = async () => {
+const handleBatchMarkAsPaid = async () => {
   if (selectedInvoices.value.size === 0) return
-  
-  try {
-    emit('markAsPaid', Array.from(selectedInvoices.value))
-    selectedInvoices.value.clear()
-    selectAll.value = false
-  } catch (error) {
-    console.error('Error marking invoices as paid:', error)
+
+  // Create the payload object
+  const payload = {
+    invoiceIds: Array.from(selectedInvoices.value)
   }
+
+  // Set the payload
+  setPayloadObj(payload)
+
+  // Call the batch mark as paid function
+  await batchMarkAsPaid()
+  emit('markAsPaid', payload.invoiceIds)
+  selectedInvoices.value.clear()
+  selectAll.value = false
+  // Emit the event and reset selections
+  // try {
+  //   emit('markAsPaid', payload.invoiceIds)
+  //   selectedInvoices.value.clear()
+  //   selectAll.value = false
+  // } catch (error) {
+  //   console.error('Error marking invoices as paid:', error)
+  // }
 }
+
 
 const isChecked = (invoice: Invoice) => {
   return selectedInvoices.value.has(invoice.id)
@@ -164,7 +181,7 @@ const isChecked = (invoice: Invoice) => {
         </div>
       </div>
       <button 
-        @click="markAsPaid"
+        @click="handleBatchMarkAsPaid"
         :disabled="selectedInvoices.size === 0"
         class="px-4 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
       >

@@ -11,6 +11,12 @@ const invoicePayload = ref({
   items: [],
   note: "",
   grandTotal: '',
+  paymentBank: {
+    accountName: "",
+    accountNumber: "",
+    bankSortCode: "",
+    bankName: ""
+}
 });
 
 export const useGenerateInvoive = () => {
@@ -50,6 +56,11 @@ export const useGenerateInvoive = () => {
     invoicePayload.value.items = data.items
     invoicePayload.value.note = data.note
     invoicePayload.value.grandTotal = data.grandTotal
+
+    invoicePayload.value.paymentBank.accountName = data.accountName
+    invoicePayload.value.paymentBank.accountNumber = data.accountNumber
+    invoicePayload.value.paymentBank.bankSortCode = data.bankSortCode
+    invoicePayload.value.paymentBank.bankName = data.bankName
   }
 
   return { generateInvoice, loading, invoicePayload, setPayload };
