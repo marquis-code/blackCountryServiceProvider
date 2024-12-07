@@ -1,5 +1,6 @@
 <template>
   <section>
+    <!-- {{ bankAccounts }} -->
     <div class="max-w-2xl p-6 mx-auto bg-white">
       <!-- Navigation and Breadcrumbs -->
       <div class="text-sm text-gray-500 flex items-center">
@@ -185,7 +186,7 @@
         <section>
           <h4 class="text-lg font-medium text-sm" >Payment Details</h4>
 
-          <div class="mt-6 space-y-4">
+          <div v-if="!bankAccounts.length" class="mt-6 space-y-4">
                 <div class="relative">
                 <label class="block font-medium text-[#1D2739] text-xs">Bank Name</label>
                 <select
@@ -234,6 +235,9 @@
                 ></div>
               </div> -->
             </div>
+            <section v-else>
+                <CoreBankCard :bankAccounts="bankAccounts" />
+            </section>
         </section>
 
           <!-- Form Navigation Buttons -->
@@ -266,12 +270,14 @@
 </template>
 
 <script lang="ts" setup>
+import { useFetchBankAccounts } from '@/composables/modules/banks/useFetchBankAccounts'
 import { useFetchNigerianBanks } from '@/composables/modules/banks/useFetchNigerianBanks'
   import { useResolveBank } from '@/composables/modules/banks/useResolveBanks'
 import { useGenerateInvoive } from '@/composables/modules/maintenance/useGenerateInvoice'
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 const { generateInvoice, loading, invoicePayload, setPayload } = useGenerateInvoive()
+const { loading: loadingBanks, bankAccounts } = useFetchBankAccounts()
 
 const { loading: fetchingBanks, banksList } = useFetchNigerianBanks()
 const { resolveBank, resolvingBankInfo, bankObj } = useResolveBank()

@@ -12,5 +12,5 @@ export const visitation_api = {
       $_create_visitation: (id: string | number, payload: any) => {
         const url = `/houses/${id}/visitations`;
         return GATEWAY_ENDPOINT.post(url, payload);
-      },
+      }
 };
