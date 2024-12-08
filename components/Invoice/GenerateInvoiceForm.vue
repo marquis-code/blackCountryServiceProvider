@@ -3,6 +3,7 @@
     <!-- {{ bankAccounts }} -->
     <div class="max-w-2xl p-6 mx-auto bg-white">
       <!-- Navigation and Breadcrumbs -->
+       <!-- {{ maintenanceRequest }} -->
       <div class="text-sm text-gray-500 flex items-center">
         <svg
           @click="router.back()"
@@ -76,6 +77,7 @@
               <input
                 type="date"
                 v-model="formData.issuedOn"
+                :min="todayDate"
                 class="w-full p-2 mt-1 outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4"
               />
             </div>
@@ -84,6 +86,7 @@
               <input
                 type="date"
                 v-model="formData.dueOn"
+                :min="todayDate"
                 class="w-full p-2 mt-1 outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4"
               />
             </div>
@@ -106,11 +109,17 @@
               />
             </div>
             <div>
-              <label class="block text-sm font-medium text-[#1D2739] text-xs">Price (£)</label>
-              <input
+              <label class="block text-sm font-medium text-[#1D2739] text-xs">Price (₦)</label>
+              <!-- <input
                 type="number"
                 v-model.number="item.price"
                 placeholder="e.g 1000"
+                class="w-full p-2 mt-1 outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4"
+              /> -->
+              <input
+                type="text"
+                 :value="formatCurrency(item.price)"
+                @input="onInput($event, item)"
                 class="w-full p-2 mt-1 outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4"
               />
             </div>
@@ -124,7 +133,7 @@
               />
             </div>
             <div>
-              <label class="block text- font-medium text-[#1D2739] text-xs">Total Price (£)</label>
+              <label class="block text- font-medium text-[#1D2739] text-xs">Total Price (₦)</label>
               <input
                 type="text"
                 :value="(item.price * item.quantity).toFixed(2)"
@@ -167,7 +176,7 @@
               <span>Add Item</span>
             </button>
             <span class="text-sm font-medium">Total Amount</span>
-            <span class="text- font-medium text-sm text-gray-600">{{ totalAmount.toFixed(2) }}</span>
+            <span class="text- font-medium text-sm text-gray-600">{{ formatCurrency(totalAmount.toFixed(2)) }}</span>
           </div>
 
           <!-- Note Section -->
@@ -184,9 +193,9 @@
           </div>
 
         <section>
-          <h4 class="text-lg font-medium text-sm" >Payment Details</h4>
+          <h4 class="text-lg font-medium text-sm mb-3" >Payment Details</h4>
 
-          <div v-if="!bankAccounts.length" class="mt-6 space-y-4">
+          <div v-if="!Object.keys(bankAccounts)?.length" class="mt-6 space-y-4">
                 <div class="relative">
                 <label class="block font-medium text-[#1D2739] text-xs">Bank Name</label>
                 <select
@@ -235,8 +244,44 @@
                 ></div>
               </div> -->
             </div>
-            <section v-else>
+            <!-- <section v-else>
                 <CoreBankCard :bankAccounts="bankAccounts" />
+                 <div>
+                  {{ bankAccounts?.accountName ?? 'Nil' }}
+                  {{ bankAccounts?.accountNumber ?? 'Nil' }}
+                  {{ bankAccounts?.bankName ?? 'Nil' }}
+                 </div>
+            </section> -->
+            <section v-if="bankAccounts">
+                <!-- Bank Debit Card UI -->
+                <div class="bank-card w-full rounded-xl p-6 bg-gradient-to-r from-blue-500 to-green-400">
+                  <div class="card-header flex justify-between items-center mb-4">
+                    <span class="bank-name text-white text-xl font-semibold">{{ bankAccounts.bankName ?? 'Nil' }}</span>
+                    <!-- Bank Logo or Icon could go here -->
+                    <div class="bank-logo w-10 h-10 bg-white rounded-full flex justify-center items-center">
+                      <span class="text-lg text-gray-700 font-bold">{{ bankAccounts.bankName?.charAt(0) ?? 'B' }}</span>
+                    </div>
+                  </div>
+
+                  <div class="card-body text-white">
+                    <div class="account-details mb-4">
+                      <div class="account-name flex justify-between">
+                        <label class="text-sm">Account Name:</label>
+                        <span class="text-lg">{{ bankAccounts.accountName ?? 'Nil' }}</span>
+                      </div>
+                      <div class="account-number flex justify-between">
+                        <label class="text-sm">Account Number:</label>
+                        <span class="text-lg">{{ bankAccounts.accountNumber ?? 'Nil' }}</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- <div class="card-footer flex justify-center mt-6">
+                    <button @click="handleManageClick" class="action-button bg-white text-blue-600 hover:bg-blue-600 hover:text-white transition duration-200 py-2 px-4 rounded-full text-sm">
+                      Manage Account
+                    </button>
+                  </div> -->
+                </div>
             </section>
         </section>
 
@@ -273,11 +318,14 @@
 import { useFetchBankAccounts } from '@/composables/modules/banks/useFetchBankAccounts'
 import { useFetchNigerianBanks } from '@/composables/modules/banks/useFetchNigerianBanks'
   import { useResolveBank } from '@/composables/modules/banks/useResolveBanks'
+  import { useFetchMaintenanceRequest } from '@/composables/modules/maintenance/useFetchMaintenenceRequest'
 import { useGenerateInvoive } from '@/composables/modules/maintenance/useGenerateInvoice'
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter, useRoute } from 'vue-router';
 const { generateInvoice, loading, invoicePayload, setPayload } = useGenerateInvoive()
 const { loading: loadingBanks, bankAccounts } = useFetchBankAccounts()
+const {
+  maintenanceRequest, loading: fetchingMaintenenceRequest } = useFetchMaintenanceRequest()
 
 const { loading: fetchingBanks, banksList } = useFetchNigerianBanks()
 const { resolveBank, resolvingBankInfo, bankObj } = useResolveBank()
@@ -333,12 +381,110 @@ const accountNumberError = ref<string | null>(null)
     }
   }
 
+  // Method to format the input value in real-time
+// function onInput(event) {
+//   rentAmount.value = unformatCurrency(event.target.value);
+//   event.target.value = formatCurrency(rentAmount.value);
+// }
+
+// const formattedRentAmount = computed({
+//   get() {
+//     return rentAmount.value ? formatCurrency(rentAmount.value) : '';
+//   },
+//   set(value) {
+//     rentAmount.value = unformatCurrency(value);
+//   }
+// }); 
+
+// function formatCurrency(value) {
+//   return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");  // Adds commas for thousands
+// }
+
+// // Function to unformat the value before storing it (removes commas)
+// function unformatCurrency(value) {
+//   return value.replace(/[^0-9]/g, '');  // Removes non-numeric characters
+// }
+
+// const rentAmount = ref('');  // Ref to store raw value without formatting
+
+// // Computed property to handle the formatted input value
+// const formattedRentAmount = computed({
+//   get() {
+//     return rentAmount.value ? formatCurrency(rentAmount.value) : '';  // Format value for display
+//   },
+//   set(value) {
+//     rentAmount.value = unformatCurrency(value);  // Store raw value without formatting
+//   }
+// });
+
+// // Method to handle input and update formatted value in real-time
+// function onInput(event) {
+//   rentAmount.value = unformatCurrency(event.target.value);  // Get raw value without formatting
+//   event.target.value = formatCurrency(rentAmount.value);  // Update the input with formatted value
+// }
+
+// Format the input as currency (adding commas for thousands)
+// function formatCurrency(value) {
+//   return value.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+// }
+
+function formatCurrency(value) {
+  if (!value) return '';
+  return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
+
+// Unformat the value to remove non-numeric characters (except for the decimal point)
+function unformatCurrency(value) {
+  return value.replace(/[^0-9.]/g, '');
+}
+
+// Method to update price formatting for a specific item
+// function onInput(item) {
+//   item.price = unformatCurrency(item.price);  // Store raw price value
+//   item.price = formatCurrency(item.price);  // Display formatted price
+// }
+
+// Method to handle input and update item price
+function onInput(event, item) {
+  // Remove any non-numeric characters, leaving only digits and decimal
+  const rawValue = event.target.value.replace(/[^0-9.]/g, '');
+  item.price = parseFloat(rawValue);  // Store the raw price as a number
+}
+
+// Computed property to handle the formatted price for each item
+function formattedPrice(item) {
+  return item.price ? formatCurrency(item.price) : '';  // Format price for display
+}
+
 const router = useRouter();
 const route = useRoute();
 
 const activeStep = ref('generate');
 
 // Define structure for formData and items
+// const formData = ref({
+//   billFrom: '',
+//   billTo: '',
+//   recipientEmail: '',
+//   billTitle: '',
+//   issuedOn: '',
+//   dueOn: '',
+//   note: ''
+// });
+
+// onMounted(() => {
+//   formData.value.billFrom = `${maintenanceRequest?.value?.serviceProvider?.firstName} ${maintenanceRequest?.value?.serviceProvider?.lastName}`
+//   formData.value.billTo = `${maintenanceRequest?.value?.tenant?.firstName} ${maintenanceRequest?.value?.tenant?.lastName}`
+//   formData.value.recipientEmail = maintenanceRequest?.value?.tenant?.email
+// })
+
+const todayDate = ref('')
+
+onMounted(() => {
+  const today = new Date()
+  todayDate.value = today.toISOString().split('T')[0] // Format as YYYY-MM-DD
+})
+
 const formData = ref({
   billFrom: '',
   billTo: '',
@@ -347,6 +493,23 @@ const formData = ref({
   issuedOn: '',
   dueOn: '',
   note: ''
+});
+
+onMounted(() => {
+  // Watch for changes in the maintenanceRequest to safely populate formData
+  watchEffect(() => {
+    if (maintenanceRequest?.value) {
+      const serviceProvider = maintenanceRequest.value.serviceProvider;
+      const tenant = maintenanceRequest.value.tenant;
+
+      if (serviceProvider && tenant) {
+        formData.value.billFrom = `${serviceProvider.firstName} ${serviceProvider.lastName}`;
+        formData.value.billTo = `${tenant.firstName} ${tenant.lastName}`;
+        formData.value.recipientEmail = tenant.email;
+        formData.value.billTitle = `Invoice for ${maintenanceRequest.value?.type}`;
+      }
+    }
+  });
 });
 
 const props = defineProps({
@@ -426,24 +589,103 @@ const handleSubmit = async () => {
 
   const grandTotal = itemsWithTotal.reduce((sum, item) => sum + item.totalAmount, 0);
 
+
   const payloadObj = {
-    billFrom: formData.value.billFrom,
-    billTo: formData.value.billTo,
-    issuedOn: formData.value.issuedOn,
-    dueOn: formData.value.dueOn,
-    items: itemsWithTotal,
-    note: formData.value.note,
-    grandTotal,
-    accountName: payload.value.accountNumber,
-    accountNumber: payload.value.accountNumber,
-    bankSortCode: payload.value.accountNumber,
-    bankName: payload.value.accountNumber
-  };
+  billFrom: formData.value.billFrom,
+  billTo: formData.value.billTo,
+  issuedOn: formData.value.issuedOn,
+  dueOn: formData.value.dueOn,
+  items: itemsWithTotal,
+  note: formData.value.note,
+  grandTotal,
+  accountName: bankAccounts?.value?.accountName ?? payload.value.accountName,
+  accountNumber: bankAccounts?.value?.accountNumber ?? payload.value.accountNumber,
+  bankSortCode: String(bankAccounts?.value?.bankSortCode) ?? payload.value.bankSortCode,
+  bankName: bankAccounts?.value?.bankName ?? payload.value.bankName,
+};
+
 
   setPayload(payloadObj);
   await generateInvoice();
-  emit('success');
+  // emit('success');
   // router.push('/dashboard/invoice/success')
 };
 
 </script>
+
+<style scoped>
+/* Bank Card Styles */
+.bank-card {
+  max-width: 400px;
+  background: linear-gradient(to right, #1d4ed8, #34d399); /* Blue to Green Gradient */
+  color: white;
+  padding: 20px;
+  border-radius: 1rem;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: 'Roboto', sans-serif;
+  position: relative;
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bank-name {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.bank-logo {
+  background-color: white;
+  color: #1d4ed8;
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.card-body {
+  margin-top: 10px;
+}
+
+.account-details {
+  margin-bottom: 15px;
+}
+
+.account-name, .account-number {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.account-name label, .account-number label {
+  font-weight: 600;
+}
+
+.card-footer {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.action-button {
+  background-color: white;
+  color: #1d4ed8;
+  padding: 12px 24px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.action-button:hover {
+  background-color: #1d4ed8;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+</style>

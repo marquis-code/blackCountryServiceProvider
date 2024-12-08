@@ -2,7 +2,7 @@
   <main>  
     
     <div v-if="!loading" class="min-h-screen flex flex-col justify-between">
-      <div class="max-w-3xl w-5/12 mx-auto bg-white p-6">
+      <div class="max-w-3xl lg:w-5/12 mx-auto bg-white p-6">
         <div class="text-gray-500 flex-col">
           <svg @click="router.back()" class="cursor-pointer" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect width="36" height="36" rx="18" fill="#EAEAEA"/>

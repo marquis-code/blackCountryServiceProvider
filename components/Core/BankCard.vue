@@ -48,8 +48,8 @@
 <script setup lang="ts">
 const props = defineProps({
     bankAccounts: {
-        type: Array,
-        default: () => []
+        type: {},
+        default: () => {}
     }
 })
 </script>

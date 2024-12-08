@@ -3,7 +3,7 @@
   <div class="p-6 max-w-6xl mx-auto">
     <!-- <h1 class="text-xl font-semibold text-[#1D2739]">Invoice</h1> -->
     <!-- <InvoiceSearch /> -->
-    <InvoiceList v-if="invoices.length && !loading" :invoices="invoices" />
+    <InvoiceList v-if="invoices.length && !loading" :invoices="invoices"/>
     <section v-else-if="loading && !invoices.length">
         <div class="rounded-md p-4 w-full mx-auto">
           <div class="animate-pulse flex space-x-4">
@@ -18,7 +18,7 @@
 </template>
 <script setup lang="ts">
 import { useFetchInvoices } from '@/composables/modules/maintenance/useFetchInvoices'
-const { loading, invoices, } =useFetchInvoices()
+const { loading, invoices } =useFetchInvoices()
 </script>
 
 <style scoped>

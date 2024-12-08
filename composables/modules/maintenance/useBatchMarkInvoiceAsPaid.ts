@@ -11,7 +11,7 @@ export const useBatchMarkAsPaid = () => {
 	const batchMarkAsPaid = async () => {
 		loading.value = true
 
-		const res = await maintenance_api.$_mark_as_paid(payload.value) as any
+		const res = await maintenance_api.$_batch_mark_as_paid(payload.value) as any
 
         if (res.type !== 'ERROR') {
             showToast({

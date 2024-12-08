@@ -11,6 +11,12 @@ import { useMarkAsPaid } from '@/composables/modules/maintenance/useMarkAsPaid'
 //   openConfirmationModal.value = false
 // }
 
+// const emit = defineEmits(['update:searchQuery'])
+
+const updateSearchQuery = (event) => {
+  emit('update:searchQuery', event.target.value)
+}
+
 const selectedIndividualInvoice = ref({})
 
 const updateInvoiceStatus = (data: any) => {
@@ -64,10 +70,13 @@ interface Metadata {
 const props = defineProps({
     invoices: {
       type: Array
+    },
+    searchQuery: {
+      type:String
     }
   })
 
-const emit = defineEmits(['update:invoices', 'markAsPaid'])
+const emit = defineEmits(['update:invoices', 'markAsPaid', 'update:searchQuery'])
 
 const selectedInvoice = ref({})
 
@@ -129,10 +138,12 @@ const handleBatchMarkAsPaid = async () => {
     invoiceIds: Array.from(selectedInvoices.value)
   }
 
-  // Set the payload
+  console.log(payload, 'poayload here')
+
+  // // Set the payload
   setPayloadObj(payload)
 
-  // Call the batch mark as paid function
+  // // Call the batch mark as paid function
   await batchMarkAsPaid()
   emit('markAsPaid', payload.invoiceIds)
   selectedInvoices.value.clear()
@@ -182,10 +193,10 @@ const isChecked = (invoice: Invoice) => {
       </div>
       <button 
         @click="handleBatchMarkAsPaid"
-        :disabled="selectedInvoices.size === 0"
+        :disabled="selectedInvoices.size === 0 || processing"
         class="px-4 py-2 bg-gray-900 text-white rounded-md hover:bg-gray-800 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
       >
-        Mark as paid
+         {{ processing ? 'processing..' : 'Mark as paid' }}
       </button>
     </div>
 

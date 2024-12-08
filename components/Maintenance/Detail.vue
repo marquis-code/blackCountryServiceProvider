@@ -126,7 +126,8 @@
   </main>
 </template>
 
-<script lang="ts" setup>import { useFetchMaintenanceRequest } from '@/composables/modules/maintenance/useFetchMaintenenceRequest'
+<script lang="ts" setup>
+import { useFetchMaintenanceRequest } from '@/composables/modules/maintenance/useFetchMaintenenceRequest'
 const {
   maintenanceRequest, loading } = useFetchMaintenanceRequest()
 import { ref } from 'vue';

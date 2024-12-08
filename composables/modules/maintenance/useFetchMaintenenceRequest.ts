@@ -8,8 +8,8 @@ export const useFetchMaintenanceRequest = () => {
 
   const fetchMaintenanceRequests = async () => {
     loading.value = true
-  
-      const res = await maintenance_api.$_fetch_maitenence_request(route.params.id) as any
+      const id = route?.params?.id || route?.query?.invoiceId
+      const res = await maintenance_api.$_fetch_maitenence_request(id) as any
       console.log(res, 'hereooo')
       if (res.type !== 'ERROR') {
         maintenanceRequest.value = res?.data || {}

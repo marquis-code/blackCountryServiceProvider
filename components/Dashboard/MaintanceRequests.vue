@@ -6,9 +6,7 @@
       <!-- Empty State -->
       <div v-if="!filteredRequests.length && !loading" class="flex flex-col items-center mt-20 text-gray-500">
         <div class="flex items-center justify-center mb-4">
-          <svg width="152" height="124" viewBox="0 0 152 124" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- SVG content omitted for brevity -->
-          </svg>
+          <img src="@/assets/icons/listing-illustration.svg" />
         </div>
         <p>No request made yet</p>
       </div>
