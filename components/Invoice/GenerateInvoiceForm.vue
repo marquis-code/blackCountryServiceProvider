@@ -244,15 +244,8 @@
                 ></div>
               </div> -->
             </div>
-            <!-- <section v-else>
-                <CoreBankCard :bankAccounts="bankAccounts" />
-                 <div>
-                  {{ bankAccounts?.accountName ?? 'Nil' }}
-                  {{ bankAccounts?.accountNumber ?? 'Nil' }}
-                  {{ bankAccounts?.bankName ?? 'Nil' }}
-                 </div>
-            </section> -->
-            <section v-if="bankAccounts">
+
+            <section v-else>
                 <!-- Bank Debit Card UI -->
                 <div class="bank-card w-full rounded-xl p-6 bg-gradient-to-r from-blue-500 to-green-400">
                   <div class="card-header flex justify-between items-center mb-4">
@@ -290,7 +283,7 @@
             <button @click="router.push('/dashboard/invoice')" type="button" class="p-2 px-6 py-3 bg-gray-200 rounded-md">
               Cancel
             </button>
-            <button @click="proceedToPreview" type="button" class="p-2 px-6 py-3 text-white bg-[#292929] rounded-md">
+            <button @click="proceedToPreview" :disabled="isButtonDisabled" type="button" class="p-2 disabled:cursor-not-allowed disabled:opacity-25 px-6 py-3 text-white bg-[#292929] rounded-md">
               Continue
             </button>
           </div>
@@ -299,7 +292,7 @@
 
       <!-- Preview Step -->
       <div v-if="activeStep === 'preview'">
-        <InvoiceReview :formData="formData" :items="items" :totalAmount="totalAmount" />
+        <InvoiceReview :bankObj="payload" :formData="formData" :items="items" :totalAmount="totalAmount" />
         <div class="flex justify-between items-center gap-4 pt-10">
           <button @click="updateURL('generate')" type="button" class="p-2 px-6 py-3 bg-gray-200 rounded-md">
             Back
@@ -509,8 +502,31 @@ onMounted(() => {
         formData.value.billTitle = `Invoice for ${maintenanceRequest.value?.type}`;
       }
     }
+
+    if(Object.keys(bankAccounts.value)?.length){
+      payload.value.accountNumber =  bankAccounts.value.accountNumber  
+      payload.value.bankName =  bankAccounts.value.bankName   
+      payload.value.bankSortCode =  bankAccounts.value.bankSortCode  
+      payload.value.accountName =  bankAccounts.value.accountName   
+    }
   });
 });
+
+const isButtonDisabled = computed(() => {
+    return !(
+      formData.value.billFrom &&
+      formData.value.billTo &&
+      formData.value.recipientEmail &&
+      formData.value.billTitle &&
+      formData.value.issuedOn &&
+      formData.value.dueOn &&
+      formData.value.note &&  
+      bankAccounts.value.accountNumber &&
+      bankAccounts.value.bankName &&
+      bankAccounts.value.bankSortCode &&
+      bankAccounts.value.accountName
+    );
+  });
 
 const props = defineProps({
   title: {

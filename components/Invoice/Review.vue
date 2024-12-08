@@ -40,15 +40,22 @@
           class="grid grid-cols-4 gap-4 py-2 text-gray-600 text-sm border-b-[0.5px] border-gray-100"
         >
           <span class="text-sm">{{ item?.name ?? 'Nil' }}</span>
-          <span class="text-sm">{{ formatCurrency(item.price) }}</span>
+          <span class="text-sm">₦{{ formatCurrency(item.price) }}</span>
           <span class="text-sm">{{ item?.quantity ?? 'Nil' }}</span>
-          <span class="text-sm">{{ formatCurrency(item.price * item.quantity) }}</span>
+          <span class="text-sm">₦{{ formatCurrency(item.price * item.quantity) }}</span>
         </div>
 
         <!-- Grand Total -->
-        <div class="flex justify-between items-center pt-4 font-semibold text-gray-800 text-lg">
+        <div class="flex justify-between items-center pt-4 font-semibold text-gray-800 text-">
           <span>Grand Total</span>
           <span>{{ formatCurrency(grandTotal) }}</span>
+        </div>
+        <div class="space-y-3 border-t-[0.5px] pt-3">
+          <!-- {{ formatted }} -->
+          <div class="flex justify-between items-center border-b-[0.5px] border-gray-25" v-for="(item, idx) in formatted" :key="key">
+          <p class="text-sm font-medium">{{ item.key }}</p>
+          <p class="text-sm">{{ item.value }}</p>
+        </div>
         </div>
       </div>
     </div>
@@ -67,6 +74,8 @@
 
 <script lang="ts" setup>
 import { defineProps, computed } from 'vue'
+import { useFormatKeys } from '@/composables/core/useFormatKeys'
+const { formatObjectKeys } = useFormatKeys()
 
 // Define the structure of an Invoice Item
 interface InvoiceItem {
@@ -74,6 +83,7 @@ interface InvoiceItem {
   price: number
   quantity: number
 }
+
 
 // Define props
 const props = defineProps<{
@@ -83,9 +93,14 @@ const props = defineProps<{
     issuedOn: string,
     dueOn: string
   },
+  bankObj: {
+    type: Object
+  },
   items: InvoiceItem[],
   amount: number
 }>()
+
+const formatted = formatObjectKeys(props.bankObj)
 
 // Calculate the grand total based on the items prop
 const grandTotal = computed(() =>

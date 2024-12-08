@@ -7,10 +7,9 @@
         type="checkbox"
         v-model="modelValue"
         class="toggle"
-        :disabled="loading"
       />
     </div>
-    <CoreFullScreenLoader :visible="loading" text="Updating preference..." />
+    <!-- <CoreFullScreenLoader :visible="loading" text="Updating preference..." /> -->
   </template>
   
   <script lang="ts" setup>
@@ -25,10 +24,10 @@
       type: String,
       required: true,
     },
-    loading: {
-      type: Boolean,
-      required: true,
-    },
+    // loading: {
+    //   type: Boolean,
+    //   required: true,
+    // },
     modelValue: {
       type: Boolean,
       required: true,
