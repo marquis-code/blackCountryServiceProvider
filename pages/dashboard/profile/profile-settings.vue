@@ -132,35 +132,7 @@ const onFileSelected = async (event: Event) => {
     }
   }
 };
-  
-  // // Function to handle file selection and upload
-  // const onFileSelected = async (event: Event) => {
-  //   const file = (event.target as HTMLInputElement).files?.[0];
-  //   if (file) {
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       profileImage.value = reader.result as string;
-  //     };
-  //     reader.readAsDataURL(file);
-  
-  //     // Upload the file
-  //     const formData = new FormData();
-  //     formData.append('file', file);
-  //     // formData.append('upload_preset', 'your-upload-preset'); // If required by your backend
-  
-  //     try {
-  //       await uploadFile(formData); // Call to uploadFile composable
-  //       if (uploadResponse.value?.secure_url) {
-  //         // Update the profile with the secure URL
-  //         await updateProfile({ profilePicture: uploadResponse.value.secure_url });
-  //         // Refresh the page on success
-  //         window.location.reload();
-  //       }
-  //     } catch (error) {
-  //       console.error('Error uploading or updating profile:', error);
-  //     }
-  //   }
-  // };
+
   
   // Account settings for the menu
   const accountSettings = ref([
