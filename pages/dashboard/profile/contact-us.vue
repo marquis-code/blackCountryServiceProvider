@@ -15,7 +15,7 @@
       <div class="mb-6 ">
         <h3 class="text-[#1D2739] rounded-xl font-medium mb-3 border-[0.5px] border-gray-25 bg-white py-4 p-3">Chat</h3>
         <div class="space-y-2 bg-white border-[0.5px] border-gray-25">
-          <div v-for="item in contactsInfo?.Chat" class="flex justify-between items-center p-4">
+          <div v-for="item in contactsInfo?.chat" class="flex justify-between items-center p-4">
             <div>
               <p class="text-gray-700">{{ item?.name ?? 'Nil' }}</p>
               <p class="text-sm text-gray-500">{{ item?.description ?? 'Nil' }}</p>
@@ -62,8 +62,22 @@
       <div class="mb-6">
         <h3 class="text-[#1D2739] rounded-xl font-medium mb-3 border-[0.5px] border-gray-25 bg-white py-4 p-3">Call</h3>
         <div class="flex justify-between items-center bg-white p-4 rounded-lg border-[0.5px] border-gray-25">
-          <div v-for="item in contactsInfo?.Call">
+          <div v-for="item in contactsInfo?.call">
             <p class="text-gray-700" v-for="itm in item?.contacts">{{ itm ?? 'Nil' }}</p>
+            <p class="text-sm text-gray-500">{{ item?.description ?? 'Nil' }}</p>
+          </div>
+        </div>
+      </div>
+
+
+        <!-- Call Section -->
+        <div class="mb-6">
+        <h3 class="text-[#1D2739] rounded-xl font-medium mb-3 border-[0.5px] border-gray-25 bg-white py-4 p-3">Lagos State Emergency Contacts</h3>
+        <div v-for="item in contactsInfo?.lagos_state_emergency_contacts" class="flex justify-between items-center bg-white p-4 rounded-lg border-[0.5px] border-gray-25">
+          <div>
+            <p class="text-gray-700">{{ item?.name ?? 'Nil' }}(
+              <span class="text-gray-700" v-for="(itm, idx) in item?.contacts" :key="idx">{{ `${itm}, ` ?? 'Nil' }}</span>
+              )</p>
             <p class="text-sm text-gray-500">{{ item?.description ?? 'Nil' }}</p>
           </div>
         </div>
@@ -73,8 +87,8 @@
       <div class="mb-6">
         <h3 class="text-[#1D2739] rounded-xl font-medium mb-3 border-[0.5px] border-gray-25 bg-white py-4 p-3">Email</h3>
         <div class="flex justify-between items-center bg-white p-4 rounded-lg border-[0.5px] border-gray-25">
-          <div v-for="item in contactsInfo?.Email">
-            <p class="text-gray-700" v-for="itm in item?.contacts">{{ itm ?? 'Nil' }}</p>
+          <div v-for="(item, index) in contactsInfo?.email" :key="index">
+            <p class="text-gray-700" v-for="(itm, idx) in item?.contacts" :key="idx">{{ itm ?? 'Nil' }}</p>
             <p class="text-sm text-gray-500">{{ item?.description ?? 'Nil' }}</p>
           </div>
         </div>
@@ -84,8 +98,8 @@
       <div>
         <h3 class="text-[#1D2739] rounded-xl font-medium mb-3 border-[0.5px] border-gray-25 bg-white py-4 p-3">Social Media</h3>
         <div class="space-y-2">
-          <div class="flex items-center gap-x-2 bg-white p-4 rounded-lg border-[0.5px] border-gray-25">
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <div @click="navigateToSocials(item)" v-for="(item, idx) in contactsInfo?.social_media" :key="idx" class="flex items-center gap-x-2 bg-white p-4 cursor-pointer rounded-lg border-[0.5px] border-gray-25">
+              <svg v-if="item.name === 'Instagram'" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="16" cy="16" r="16" fill="#FEF7FF"/>
                   <rect x="8.42578" y="8.04492" width="15.5556" height="15.9091" rx="4.26667" fill="url(#paint0_radial_6053_206888)"/>
                   <rect x="8.42578" y="8.04492" width="15.5556" height="15.9091" rx="4.26667" fill="url(#paint1_radial_6053_206888)"/>
@@ -111,27 +125,21 @@
                   <stop offset="1" stop-color="#6A45BE" stop-opacity="0"/>
                   </radialGradient>
                   </defs>
-                  </svg>
-                  
-            <p class="text-gray-700">Instagram</p>
-          </div>
-          <div class="flex items-center gap-x-2 bg-white p-4 rounded-lg border-[0.5px] border-gray-25">
-              <svg width="32" height="33" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+              </svg>
+
+              <svg v-if="item.name === 'Twitter'" width="32" height="33" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="16" cy="16.75" r="16" fill="#F0F2F5"/>
                   <rect x="7.91016" y="8.75" width="16" height="16" rx="4.26667" fill="black"/>
                   <path d="M18.2181 13.0156H19.4151L16.8 16.0045L19.8764 20.0716H17.4676L15.5809 17.6049L13.4222 20.0716H12.2245L15.0215 16.8747L12.0703 13.0156H14.5403L16.2456 15.2703L18.2181 13.0156ZM17.798 19.3552H18.4612L14.1799 13.6944H13.4681L17.798 19.3552Z" fill="white"/>
                   </svg>
-                  
-            <p class="text-gray-700">Twitter</p>
-          </div>
-          <div class="flex items-center gap-x-2 bg-white p-4 rounded-lg border-[0.5px] border-gray-25">
-              <svg width="32" height="33" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+                  <svg v-if="item.name === 'Facebook'" width="32" height="33" viewBox="0 0 32 33" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="16" cy="16.25" r="16" fill="#E6F1FF"/>
                   <rect x="7.79688" y="8.25" width="16" height="16" rx="4.26667" fill="#1877F2"/>
                   <path d="M18.9094 18.5645L19.2656 16.252H17.0469V14.752C17.0469 14.1207 17.3563 13.502 18.35 13.502H19.3594V11.5332C19.3594 11.5332 18.4438 11.377 17.5688 11.377C15.7406 11.377 14.5469 12.4832 14.5469 14.4895V16.252H12.5156V18.5645H14.5469V24.252H17.0469V18.5645H18.9094Z" fill="white"/>
                   </svg>
                   
-            <p class="text-gray-700">Facebook</p>
+            <p class="text-gray-700">{{ item?.name ?? 'Nil' }}</p>
           </div>
         </div>
       </div>
@@ -157,6 +165,11 @@
  definePageMeta({
   layout: "dashboard"
 })
+
+const navigateToSocials = (item: any) => {
+  console.log(item, 'item herre')
+  window.location.href = item.contacts[0]
+}
 
   </script>
   
