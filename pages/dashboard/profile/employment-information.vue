@@ -61,8 +61,8 @@
     import { useUser } from '@/composables/auth/user';
     import { use_update_profile } from '@/composables/auth/updateProfile';
     import { useRouter, useRoute } from 'vue-router';
-    import { use_tenant_profile } from '@/composables/auth/fetchProfile.ts'
-const { loading, profileObj } = use_tenant_profile()
+    import { use_service_provider_profile } from '@/composables/auth/fetchProfile.ts'
+const { loading, profileObj } = use_service_provider_profile()
 
 definePageMeta({
   layout: "dashboard"

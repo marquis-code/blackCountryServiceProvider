@@ -1,7 +1,7 @@
 <template>
   <main>
     
-  <div class="p-8 bg-gray-25 min-h-screen">
+  <div class="p-3 bg-gray-25 min-h-screen">
     <div class="max-w-xl mx-auto px-6">
       <svg @click="router.back()" class="cursor-pointer mb-3" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
         <rect width="36" height="36" rx="18" fill="#EAEAEA"/>
@@ -15,7 +15,7 @@
       </div>
 
       <section class="space-y-3">
-        <div @click="router.push('/profile/create-password')" class="flex cursor-pointer justify-between items-center p-4 rounded-lg bg-white">
+        <div @click="router.push('/dashboard/profile/create-password')" class="flex cursor-pointer justify-between items-center p-4 rounded-lg bg-white">
           <div class="space-y-2">
             <p class="text-[#1D2739] font-medium text-sm">Create password</p>
             <p class="text-[#1D2739] text-xs">
@@ -39,7 +39,7 @@
           </svg>
         </div>
 
-        <div @click="router.push('/profile/change-password')" class="flex cursor-pointer justify-between items-center p-4 rounded-lg bg-white">
+        <div @click="router.push('/dashboard/profile/change-password')" class="flex cursor-pointer justify-between items-center p-4 rounded-lg bg-white">
           <div class="space-y-2">
             <p class="text-[#1D2739] text-sm font-medium">Change password</p>
             <p class="text-[#1D2739] text-xs">

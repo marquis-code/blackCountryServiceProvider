@@ -36,16 +36,16 @@ export const auth_api = {
           const url = `/tenants/exists`
 		  return GATEWAY_ENDPOINT.get(`${url}?email=${encodeURIComponent(email)}`);
 	},
-	$_fetch_profile: () => {
-		const url = '/tenants/profile'
+	$_fetch_profile: (userId: any) => {
+		const url = `/service-providers/${userId}`
 		return GATEWAY_ENDPOINT.get(url);
   },
   $_update_profile: (payload: any) => {
-	const url = '/tenants/profile'
+	const url = '/service-providers/profile'
 	return GATEWAY_ENDPOINT.patch(url, payload);
 },
 $_change_password: (payload: any) => {
-	const url = '/tenants/password'
+	const url = '/service-providers/password'
 	return GATEWAY_ENDPOINT.patch(url, payload);
 }
 }

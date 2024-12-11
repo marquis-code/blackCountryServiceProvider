@@ -1,7 +1,7 @@
 <template>
  <main>
   
-  <div class="p-6 bg-gray-25 min-h-screen">
+  <div v-if="!loading" class="p-6 bg-gray-25 min-h-screen">
     <div class="max-w-2xl mx-auto">
       <!-- Breadcrumbs -->
       <div class="text-sm text-gray-500 mb-4">
@@ -10,14 +10,15 @@
         <span class="font-medium text-gray-700">Contact us</span>
       </div>
 
+      <!-- {{ contactsInfo }} -->
       <!-- Chat Section -->
       <div class="mb-6 ">
         <h3 class="text-[#1D2739] rounded-xl font-medium mb-3 border-[0.5px] border-gray-25 bg-white py-4 p-3">Chat</h3>
         <div class="space-y-2 bg-white border-[0.5px] border-gray-25">
-          <div class="flex justify-between items-center p-4">
+          <div v-for="item in contactsInfo?.Chat" class="flex justify-between items-center p-4">
             <div>
-              <p class="text-gray-700">Live Chat</p>
-              <p class="text-sm text-gray-500">Start a conversation on live chat</p>
+              <p class="text-gray-700">{{ item?.name ?? 'Nil' }}</p>
+              <p class="text-sm text-gray-500">{{ item?.description ?? 'Nil' }}</p>
             </div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -34,7 +35,7 @@
               />
             </svg>
           </div>
-          <div class="flex justify-between items-center p-4">
+          <!-- <div class="flex justify-between items-center p-4">
             <div>
               <p class="text-gray-700">WhatsApp</p>
               <p class="text-sm text-gray-500">Start a conversation on WhatsApp</p>
@@ -53,7 +54,7 @@
                 d="M9 5l7 7-7 7"
               />
             </svg>
-          </div>
+          </div> -->
         </div>
       </div>
 
@@ -61,9 +62,9 @@
       <div class="mb-6">
         <h3 class="text-[#1D2739] rounded-xl font-medium mb-3 border-[0.5px] border-gray-25 bg-white py-4 p-3">Call</h3>
         <div class="flex justify-between items-center bg-white p-4 rounded-lg border-[0.5px] border-gray-25">
-          <div>
-            <p class="text-gray-700">+234 000 000 0000</p>
-            <p class="text-sm text-gray-500">Average response time: 2 minutes</p>
+          <div v-for="item in contactsInfo?.Call">
+            <p class="text-gray-700" v-for="itm in item?.contacts">{{ itm ?? 'Nil' }}</p>
+            <p class="text-sm text-gray-500">{{ item?.description ?? 'Nil' }}</p>
           </div>
         </div>
       </div>
@@ -72,9 +73,9 @@
       <div class="mb-6">
         <h3 class="text-[#1D2739] rounded-xl font-medium mb-3 border-[0.5px] border-gray-25 bg-white py-4 p-3">Email</h3>
         <div class="flex justify-between items-center bg-white p-4 rounded-lg border-[0.5px] border-gray-25">
-          <div>
-            <p class="text-gray-700">support@blackcountry.com</p>
-            <p class="text-sm text-gray-500">Average response time: 6 hours</p>
+          <div v-for="item in contactsInfo?.Email">
+            <p class="text-gray-700" v-for="itm in item?.contacts">{{ itm ?? 'Nil' }}</p>
+            <p class="text-sm text-gray-500">{{ item?.description ?? 'Nil' }}</p>
           </div>
         </div>
       </div>
@@ -136,10 +137,23 @@
       </div>
     </div>
   </div>
+
+  <section class="flex-1 overflow-auto" v-else>
+              <div class="rounded-md p-4 w-full mx-auto">
+                <div class="animate-pulse flex space-x-4">
+                  <div class="flex-1 space-y-6 py-1">
+                    <div class="h-96 bg-slate-200 rounded"></div>
+                  </div>
+                </div>
+              </div>
+            </section>
  </main>
   </template>
   
   <script setup lang="ts">
+  import {  useFetchContacts } from '@/composables/core/useFetchContacts'
+  const { loading,
+    contactsInfo } = useFetchContacts()
  definePageMeta({
   layout: "dashboard"
 })

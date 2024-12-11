@@ -4,13 +4,9 @@ const { showToast } = useCustomToast();
 const loading = ref(false)
 const payload = ref({
     notifications: {
-        emailEnabled: true,
-        rentDueReminderEnabled: true,
-        leaseRenewalNoticeEnabled: true,
-        propertyAlertEnabled: true,
-        rentalApplicationUpdate: true,
-        maintenanceUpdateEnabled: true,
-        securityAlertEnabled: false
+        emailNotification: true,
+        serviceRequestAssigned: true,
+        serviceRequestReminder: true
     }
 })
 

@@ -1,6 +1,6 @@
 import { useCustomToast } from '@/composables/core/useCustomToast'
-import { use_tenant_profile } from '@/composables/auth/fetchProfile'
-const { loading: loadingProfile, profileObj } = use_tenant_profile()
+import { use_service_provider_profile } from '@/composables/auth/fetchProfile'
+const { loading: loadingProfile, profileObj } = use_service_provider_profile()
 const { showToast } = useCustomToast();
 const route = useRoute()
 const router = useRouter()
