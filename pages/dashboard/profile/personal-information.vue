@@ -1,16 +1,19 @@
 <template>
-  <Layout class="flex flex-col justify-between h-screen border-4 pb-44 bg-gray-25 relative">
+  <Layout class="flex flex-col justify-between h-screen pb-44 bg-gray-25 relative">
     <main class="">  
       <div class="flex flex-col justify-between">
         <div class="max-w-3xl mx-auto p-6 w-full">
           <div class="text-gray-500 flex-col">
             <h2 class="text-lg font-semibold text-[#1D2739] pt-3">Profile Information</h2>            
           </div>
+          <!-- {{ profileObj }} -->
+<!-- {{ credential }} -->
+
           <div class="space-y-6">
             <div class="">
               <div class="mt-6 bg-[#F0F2F5] rounded-lg p-6 justify-center text-center flex items-center">
                 <div id="image-preview" class="mb-4 pr-10">
-                  <img v-if="profileObj.profilePicture" :src="profileObj.profilePicture" class="h-16 w-16 rounded-full" />
+                  <img v-if="credential?.profilePicture?.length" :src="credential?.profilePicture" class="h-16 w-16 rounded-full" />
                   <img
                     v-else
                     src="@/assets/icons/avatar.svg"
@@ -47,11 +50,11 @@
             </div>
             <div>
               <label for="email" class="text-[#1D2739] text-sm">Email</label>
-              <input name="email" id="email" v-model="credential.email" type="email" class="w-full p-2 mt-1 disabled:bg-gray-[#E4E7EC] cursor-not-allowed outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4" disabled />
+              <input name="email" id="email" v-model="credential.email" type="email" class="w-full p-2 mt-1 disabled:bg-gray-[#E4E7EC] cursor-not-allowed outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4" readonly/>
             </div>
             <div>
-              <label name="role" class="text-[#1D2739] text-sm">Role</label>
-              <input name="role" id="role" v-model="credential.role" type="text" class="w-full p-2 mt-1 disabled:bg-gray-[#E4E7EC] cursor-not-allowed outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4" disabled />
+              <label name="role" class="text-[#1D2739] text-sm">Craft</label>
+              <input name="role" id="role" v-model="credential.craft" type="text" class="w-full p-2 mt-1  outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4" />
             </div>
           </div>
         </div>
@@ -97,6 +100,11 @@ watch(
     fullName.value = `${firstName || ''} ${lastName || ''}`.trim();
   }
 );
+
+watch(() => profileObj.value.craft, () => {
+  credential.value.craft = profileObj?.value?.craft
+})
+
 
 // Profile image state and file input ref
 const profileImage = ref<string | null>(null);
@@ -159,6 +167,7 @@ const handleSave = async () => {
   const payload = {
     firstName: firstName || '',
     lastName: lastNameParts.join(' ') || '',
+    craft: credential?.value?.craft
   };
   await updateProfile(payload);
 };

@@ -16,7 +16,7 @@ export const use_service_provider_profile = () => {
 
       if(res.status == 200 || res.status == 201){
         console.log(res, 'res here');
-         profileObj.value = res.data
+         profileObj.value = res?.data ?? {}
       }
 
     } catch (error) {
