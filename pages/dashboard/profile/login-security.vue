@@ -15,7 +15,7 @@
       </div>
 
       <section class="space-y-3">
-        <div @click="router.push('/dashboard/profile/create-password')" class="flex cursor-pointer justify-between items-center p-4 rounded-lg bg-white">
+        <!-- <div @click="router.push('/dashboard/profile/create-password')" class="flex cursor-pointer justify-between items-center p-4 rounded-lg bg-white">
           <div class="space-y-2">
             <p class="text-[#1D2739] font-medium text-sm">Create password</p>
             <p class="text-[#1D2739] text-xs">
@@ -37,7 +37,7 @@
               d="M9 5l7 7-7 7"
             />
           </svg>
-        </div>
+        </div> -->
 
         <div @click="router.push('/dashboard/profile/change-password')" class="flex cursor-pointer justify-between items-center p-4 rounded-lg bg-white">
           <div class="space-y-2">
