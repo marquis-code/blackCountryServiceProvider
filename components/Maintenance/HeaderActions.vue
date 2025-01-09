@@ -12,7 +12,7 @@
             selectedOption === option ? 'bg-[#5B8469] text-white' : 'bg-[#F0F2F5] text-[#1A1A1A]'
           ]"
         >
-          {{ option }}
+          {{ option === 'in_progress' ? 'In Progress' : option }}
         </button>
       </div>
     </div>
@@ -25,7 +25,7 @@ const { queryObj } = useFetchMaintenanceRequests()
 import { ref } from 'vue';
 
 // Define the tab options
-const options = ['All requests', 'Accepted', 'Pending', 'Completed', 'Declined', 'in_progress', 'Archived'];
+const options = ['All requests', 'Accepted', 'Pending', 'Completed', 'Declined', 'in_progress'];
 const selectedOption = ref(options[0]); // Set default selected option
 
 // Emit event when an option is selected
@@ -41,7 +41,7 @@ const selectOption = (option: string) => {
         Completed: 'completed',
         Cancelled: 'cancelled',
         Declined: 'declined',
-        Archived: 'archived'
+        // Archived: 'archived'
       };
       queryObj.value.status = statusMap[option] || 'pending';
   } else {

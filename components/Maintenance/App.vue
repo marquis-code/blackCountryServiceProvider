@@ -11,7 +11,7 @@
                     <img src="@/assets/icons/maintenance-empty-state.svg" />
 
                     </div>
-                    <p>No {{ selectedStatus  }} Maintenence request available </p>
+                    <p>No {{ selectedStatus === 'in_progress' ? 'In Progress' : selectedStatus }} Maintenence request available </p>
                 </div>
 
                

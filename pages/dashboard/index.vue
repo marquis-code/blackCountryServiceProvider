@@ -57,18 +57,11 @@
 
 
         <div class="rounded-lg mb-4 space-y-3">
-          <div class="flex justify-between items-center w-full px-6 bg-white rounded-lg py-4 border-[0.5px] border-gray-25">
+          <!-- <div class="flex justify-between items-center w-full px-6 bg-white rounded-lg py-4 border-[0.5px] border-gray-25">
             <h2 class="text- font-medium text-[#1D2739] mb-2">Recent
               transactions
             </h2>
             <a href="#" class="text-[#D0D5DD] hover:underline">View all</a>
-          </div>
-          <!-- <div class="flex justify-center items-center py-10 bg-white">
-            <DashboardEmptyState icon="icon-calendar" message="No recent transactions made">
-              <template #icon>
-                <img src="@/assets/icons/transactions-illustration.svg" alt="" />
-              </template>
-            </DashboardEmptyState>
           </div> -->
           <DashboardTransactionsList />
         </div>
