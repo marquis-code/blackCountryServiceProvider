@@ -54,7 +54,10 @@
             </div>
             <div>
               <label name="role" class="text-[#1D2739] text-sm">Craft</label>
-              <input name="role" id="role" v-model="credential.craft" type="text" class="w-full p-2 mt-1  outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4" />
+              <!-- <input name="role" id="role" v-model="credential.craft" type="text" class="w-full p-2 mt-1  outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4" /> -->
+               <select class="w-full p-2 mt-1  outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4" v-model="credential.craft">
+                  <option v-for="(craft, idx) in craftList" :key="idx" :value="craft">{{ craft }}</option>
+               </select>
             </div>
           </div>
         </div>
@@ -100,6 +103,29 @@ watch(
     fullName.value = `${firstName || ''} ${lastName || ''}`.trim();
   }
 );
+
+
+const craftList = ref([
+  "Plumber",
+  "Carpenter",
+  "Painter",
+  "Tiler",
+  "Welder",
+  "Mason",
+  "Gardener",
+  "Air Conditioning Technician",
+  "Refrigerator Technician",
+  "Generator Repair Technician",
+  "Satellite/Cable Installer",
+  "Upholsterer",
+  "Pest Control Technician",
+  "Appliance Repair Technician",
+  "Glass/Window Repair Specialist",
+  "Locksmith",
+  "Flooring Installer",
+  "Roof Repair Specialist",
+  "General Handyman"
+])
 
 watch(() => profileObj.value.craft, () => {
   credential.value.craft = profileObj?.value?.craft
