@@ -53,6 +53,10 @@
               <input name="email" id="email" v-model="credential.email" type="email" class="w-full p-2 mt-1 disabled:bg-gray-[#E4E7EC] cursor-not-allowed outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4" readonly/>
             </div>
             <div>
+              <label for="phone" class="text-[#1D2739] text-sm">Phone Number</label>
+              <input name="phone" id="phone" v-model="credential.phone" type="phone" class="w-full p-2 mt-1 disabled:bg-gray-[#E4E7EC] cursor-not-allowed outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4" readonly/>
+            </div>
+            <div>
               <label name="role" class="text-[#1D2739] text-sm">Craft</label>
               <!-- <input name="role" id="role" v-model="credential.craft" type="text" class="w-full p-2 mt-1  outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4" /> -->
                <select class="w-full p-2 mt-1  outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4" v-model="credential.craft">

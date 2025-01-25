@@ -154,6 +154,7 @@ interface ProfileCredential {
   profilePicture: string
   craft: string
   email: string
+  phone: string;
   isEmailVerified: boolean | null
 }
 
@@ -170,6 +171,7 @@ export const use_update_profile = () => {
     profilePicture: "",
     craft: "",
     email: "",
+    phone: "",
     isEmailVerified: null
   }) as Ref<ProfileCredential>  // Explicit typing as Ref
 
@@ -288,6 +290,7 @@ export const use_update_profile = () => {
           profilePicture: parsedUser?.profilePicture || "",
           craft: parsedUser?.craft || profileObj.value?.craft || "",
           email: parsedUser?.email || "",
+          phone: parsedUser?.phone || "",
           isEmailVerified: parsedUser?.isEmailVerified || null
         }
         
@@ -305,6 +308,7 @@ export const use_update_profile = () => {
           profilePicture: profileObj.value?.profilePicture || "",
           craft: profileObj.value?.craft || "",
           email: profileObj.value?.email || "",
+          phone: profileObj.value?.phone || "",
           isEmailVerified: profileObj.value?.isEmailVerified || null
         }
         
