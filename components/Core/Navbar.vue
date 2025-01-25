@@ -44,7 +44,7 @@
           <img class="h-8 cursor-pointer" src="@/assets/icons/notification.svg" alt="" />
        </NuxtLink>
 
-        <NuxtLink to="/dashboard/profile'" class="flex cursor-pointer items-center block space-x-2">
+        <NuxtLink to="/dashboard/profile" class="flex cursor-pointer items-center block space-x-2">
           <img src="@/assets/icons/user-icon.svg" alt="" />
 
           <span class="text-">{{ `${user?.firstName} ${user?.lastName}` ?? 'Nil' }}</span>
