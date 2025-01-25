@@ -1,6 +1,6 @@
 <template>
   <main>
-    <CoreNavbar />
+  <CoreNavbar />
     <section>
         <slot></slot>
     </section>

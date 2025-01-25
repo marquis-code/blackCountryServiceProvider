@@ -40,15 +40,17 @@
         </div>
       </div>
       <div class="flex items-center space-x-4 hidden lg:flex">
-        <img @click="router.push('/dashboard/notifications')" class="h-8 cursor-pointer" src="@/assets/icons/notification.svg" alt="" />
+       <NuxtLink to="/dashboard/notifications">
+          <img class="h-8 cursor-pointer" src="@/assets/icons/notification.svg" alt="" />
+       </NuxtLink>
 
-        <button @click="router.push('/dashboard/profile')" class="flex cursor-pointer items-center block space-x-2">
+        <NuxtLink to="/dashboard/profile'" class="flex cursor-pointer items-center block space-x-2">
           <img src="@/assets/icons/user-icon.svg" alt="" />
 
           <span class="text-">{{ `${user?.firstName} ${user?.lastName}` ?? 'Nil' }}</span>
           <img src="@/assets/icons/more-caret.svg" alt="" />
 
-        </button>
+        </NuxtLink>
       </div>
     </nav>
 

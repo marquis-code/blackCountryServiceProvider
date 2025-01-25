@@ -254,6 +254,7 @@ const { completionPercentage } = useProfileCompletion(userData);
 // const userObj = ref({})
 definePageMeta({
   layout: "dashboard",
+  middleware: 'auth'
 });
 
 // onMounted(() => {

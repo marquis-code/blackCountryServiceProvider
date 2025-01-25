@@ -111,7 +111,8 @@ const options = ref({
 });
 
 definePageMeta({
-  layout: "dashboard"
+  layout: "dashboard",
+   middleware: 'auth'
 })
 </script>
 

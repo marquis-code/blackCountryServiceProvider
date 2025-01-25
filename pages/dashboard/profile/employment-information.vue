@@ -65,7 +65,8 @@
 const { loading, profileObj } = use_service_provider_profile()
 
 definePageMeta({
-  layout: "dashboard"
+  layout: "dashboard",
+   middleware: 'auth'
 })
 
     

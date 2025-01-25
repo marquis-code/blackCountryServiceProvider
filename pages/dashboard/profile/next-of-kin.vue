@@ -135,9 +135,10 @@ watch(profileObj, (newProfile) => {
       });
       router.back();
     };
-    
+
     definePageMeta({
-  layout: "dashboard"
+  layout: "dashboard",
+   middleware: 'auth'
 })
     </script>
     

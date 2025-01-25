@@ -95,7 +95,8 @@
   const router = useRouter()
 
   definePageMeta({
-  layout: "dashboard"
+  layout: "dashboard",
+   middleware: 'auth'
 })
   
   const { user } = useUser();

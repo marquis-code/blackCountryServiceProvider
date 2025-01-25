@@ -127,11 +127,10 @@
 <script setup lang="ts">
 const router = useRouter()
 const cards = ref(['credit', 'debit'])
-
 definePageMeta({
-  layout: "dashboard"
+  layout: "dashboard",
+   middleware: 'auth'
 })
-
 </script>
 
 <style scoped></style>
