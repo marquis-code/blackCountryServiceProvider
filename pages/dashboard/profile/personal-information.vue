@@ -167,11 +167,11 @@ const onFileSelected = async (event: Event) => {
       await uploadFile(file); // Pass the file directly
 
       // Check if the upload was successful
-      if (uploadResponse.value?.secure_url) {
+      if (uploadResponse.value?.url) {
         // Update the profile image with the secure URL after upload
-        profileImage.value = uploadResponse.value.secure_url;
+        profileImage.value = uploadResponse.value.url;
 
-        const uploadPayload = { profilePicture: uploadResponse.value.secure_url };
+        const uploadPayload = { profilePicture: uploadResponse.value.url };
         updatingImageProfile.value = true
         await updateProfile(uploadPayload)
         updatingImageProfile.value = false
