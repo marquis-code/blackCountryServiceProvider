@@ -68,8 +68,8 @@
                   >
                     <div class="flex items-center">
                       <img
-                        v-if="user.profilePicture"
-                        :src="user.profilePicture"
+                        v-if="user?.profilePicture"
+                        :src="user?.profilePicture"
                         class="w-10 h-10 rounded-full mr-3"
                         alt=""
                       />
@@ -93,14 +93,14 @@
       <ul v-if="users.length && !loading">
         <li
           v-for="user in users"
-          :key="user.participant.id"
+          :key="user?.participant.id"
           @click="selectUser(user)"
           class="flex items-center justify-between p-3 mb-2 border-b last:border-b-0 border-gray-100 cursor-pointer hover:bg-gray-100"
         >
    
           <div class="flex items-center w-full">
-            <img v-if="user.profilePicture" :src="user.profilePicture" class="w-10 h-10 rounded-full mr-3" alt="" />
-            <img v-else src="@/assets/icons/user-avatar.svg" class="w-10 h-10 border shadow border-gray-500 rounded-full mr-3" alt="" />
+            <img v-if="user?.profilePicture" :src="user?.profilePicture" class="w-10 h-10 rounded-full mr-3" alt="" />
+            <img v-else src="@/assets/icons/users-avatar.svg" class="w-10 h-10 border shadow border-gray-500 rounded-full mr-3" alt="" />
             <div class="w-full space-y-1">
              <div class='flex justify-between items-center w-full'>
               <p class="font-">{{ user?.participant?.firstName }} {{ user?.participant?.lastName }}</p>

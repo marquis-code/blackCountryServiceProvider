@@ -16,8 +16,8 @@
         <div class="mt-6 bg-[#F0F2F5] rounded-lg p-6 border-dashed border-2 border-[#F0F2F5] justify-center text-center flex items-center">
           <div id="image-preview" class="mb-4">
             <img
-              v-if="user.profilePicture || profileImage"
-              :src="profileImage || user.profilePicture"
+              v-if="user?.profilePicture || profileImage"
+              :src="profileImage || user?.profilePicture"
               alt="Profile Preview"
               class="h-20 w-20 rounded-full object-cover"
             />
@@ -32,7 +32,7 @@
                   <path d="M2 6H10" stroke="white" stroke-linecap="round" stroke-linejoin="round" />
                 </svg>
                 <span v-if="loading">Uploading...</span>
-                <span v-else> {{user.profilePicture ? 'Change Photo' : 'Add Photo'}}</span>
+                <span v-else> {{user?.profilePicture ? 'Change Photo' : 'Add Photo'}}</span>
               </button>
               <input
                 type="file"
@@ -126,9 +126,9 @@ const onFileSelected = async (event: Event) => {
     // Upload the file using the composable
     await uploadFile(file);
 
-    if (uploadResponse.value?.secure_url) {
+    if (uploadResponse.value?.url) {
       // Update profile with the secure URL after upload
-      const uploadPayload = { profilePicture: uploadResponse.value.secure_url }
+      const uploadPayload = { profilePicture: uploadResponse.value.url }
       await updateProfile(uploadPayload);
     }
   }
