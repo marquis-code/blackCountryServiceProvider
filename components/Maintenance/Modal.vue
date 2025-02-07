@@ -1,10 +1,8 @@
-<template>
+<!-- <template>
     <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div class="bg-white rounded-lg max-w-md w-full p-6">
         <h2 class="text-lg font-semibold text-gray-800 mb-4">
-          <template v-if="type === 'accept'">Accept Request</template>
-          <template v-else-if="type === 'decline'">Decline Request</template>
-          <template v-else-if="type === 'updateStatus'">Update work status</template>
+          <template v-if="type === 'updateStatus'">Update work status</template>
         </h2>
   
         <div v-if="type === 'updateStatus'" class="space-y-4">
@@ -13,7 +11,7 @@
               <p class="font-medium text-[#1D2739]">In-progress</p>
               <p class="text-sm text-[#667085] leading-snug">It indicates that you, the service provider is actively addressing the issue or performing the requested maintenance.</p>
             </div>
-            <input type="radio" v-model="selectedStatus" value="In-progress" class="mt-1 h-10 w-10">
+            <input :checked="maintenanceRequest.status === 'in_progress'" type="radio" v-model="selectedStatus" value="In-progress" class="mt-1 h-10 w-10">
           </label>
   
           <label class="flex items-start space-x-3">
@@ -21,13 +19,10 @@
               <p class="font-medium text-[#1D2739]">Completed</p>
               <p class="text-sm text-[#667085] leading-snug">It indicates that you, the service provider have addressed the issue.</p>
             </div>
-            <input type="radio" v-model="selectedStatus" value="Completed" class="mt-1 h-6 w-6">
+            <input :checked="maintenanceRequest.status === 'completed'" type="radio" v-model="selectedStatus" value="Completed" class="mt-1 h-6 w-6">
           </label>
         </div>
-  
-        <p v-else class="text-sm text-gray-600 mb-6">
-          Are you sure you want to {{ type }} this maintenance request?
-        </p>
+
   
         <div class="flex justify-end space-x-4 pt-14">
           <button @click="$emit('close')" class="px-4 py-3 w-full border-gray-100 border bg-white text-[#292929] rounded-lg text-sm">Cancel</button>
@@ -38,7 +33,7 @@
             :class="{
               'bg-gray-900 text-white': type === 'updateStatus',
               'bg-[#292929] text-white': type !== 'updateStatus',
-              'cursor-not-allowed opacity-50': isLoading // Disable button while loading
+              'cursor-not-allowed opacity-50': isLoading 
             }"
             :disabled="isLoading"
           >
@@ -195,5 +190,128 @@ const isLoading = computed(() => {
   }
 }
 
+  </style>
+   -->
+
+   <template>
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg max-w-md w-full p-6">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">
+          <template v-if="type === 'updateStatus'">Update work status</template>
+        </h2>
+  
+        <div v-if="type === 'updateStatus'" class="space-y-4">
+          <label class="flex items-start space-x-3">
+            <div>
+              <p class="font-medium text-[#1D2739]">In-progress</p>
+              <p class="text-sm text-[#667085] leading-snug">
+                It indicates that you, the service provider, are actively addressing the issue or performing the requested maintenance.
+              </p>
+            </div>
+            <input :checked="maintenanceRequest.status === 'in_progress'" type="radio" v-model="selectedStatus" value="In-progress" class="mt-1 h-10 w-10">
+          </label>
+  
+          <label class="flex items-start space-x-3">
+            <div>
+              <p class="font-medium text-[#1D2739]">Completed</p>
+              <p class="text-sm text-[#667085] leading-snug">
+                It indicates that you, the service provider, have addressed the issue.
+              </p>
+            </div>
+            <input :checked="maintenanceRequest.status === 'completed'" type="radio" v-model="selectedStatus" value="Completed" class="mt-1 h-6 w-6">
+          </label>
+        </div>
+  
+        <div class="flex justify-end space-x-4 pt-14">
+          <button @click="$emit('close')" class="px-4 py-3 w-full border-gray-100 border bg-white text-[#292929] rounded-lg text-sm">Cancel</button>
+  
+          <button
+            @click="confirmAction"
+            class="px-4 py-3 w-full rounded-lg flex items-center justify-center"
+            :class="{
+              'bg-gray-900 text-white': type === 'updateStatus',
+              'cursor-not-allowed opacity-50': isLoading 
+            }"
+            :disabled="isLoading"
+          >
+            <template v-if="isLoading">
+              <span class="loader"></span> 
+              <span>Updating...</span>
+            </template>
+            <template v-else>
+              <span>Update</span>
+            </template>
+          </button>
+        </div>
+      </div>
+    </div>
+  </template>
+  
+  <script lang="ts" setup>
+  import { useCompleteMaintenenceRequest } from '@/composables/modules/maintenance/useCompleteMaintenenceRequest'
+  import { useStartMaintenenceRequest } from '@/composables/modules/maintenance/useSetMaintenenceInProgress'
+  import { useCustomToast } from '@/composables/core/useCustomToast'
+  import { ref, computed } from 'vue';
+  const { showToast } = useCustomToast();
+  const { startMaintenenceRequest, loading: starting } = useStartMaintenenceRequest()
+  const { completeMaintenenceRequest, loading: completing } = useCompleteMaintenenceRequest()
+  const props = defineProps({
+    type: {
+      type: String,
+      required: true
+    },
+    maintenanceRequest: {
+      type: Object,
+      required: true
+    }
+  });
+  const emit = defineEmits(['close']);
+  const selectedStatus = ref<string | null>(null);
+  
+  const confirmAction = async () => {
+    if (props.type === 'updateStatus' && !selectedStatus.value) {
+      showToast({
+        title: "Error",
+        message: "Please select a status before updating",
+        toastType: "error",
+        duration: 3000
+      });
+      return;
+    }
+  
+    if (selectedStatus.value === 'In-progress') {
+      await startMaintenenceRequest(props.maintenanceRequest.id);
+    } else if (selectedStatus.value === 'Completed') {
+      await completeMaintenenceRequest(props.maintenanceRequest.id);
+    }
+  
+    emit('close');
+  };
+  
+  const isLoading = computed(() => {
+    return selectedStatus.value === 'In-progress' ? starting.value : 
+           selectedStatus.value === 'Completed' ? completing.value : false;
+  });
+  </script>
+  
+  <style scoped>
+  .loader {
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #292929;
+    border-radius: 50%;
+    width: 1rem;
+    height: 1rem;
+    animation: spin 0.6s linear infinite;
+    margin-right: 0.5rem;
+  }
+  
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
   </style>
   

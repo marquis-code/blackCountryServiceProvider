@@ -11,6 +11,7 @@
 //   profilePicture: string
 //   craft: string
 //   email: string
+//   phone: string;
 //   isEmailVerified: boolean | null
 // }
 
@@ -20,15 +21,16 @@
 //   const { profileObj } = use_service_provider_profile()
 //   const { showToast } = useCustomToast()
 
-//   // Initialize the credential object with default values
+//   // Initialize the credential object with default values and proper typing
 //   const credential = ref<ProfileCredential>({
 //     firstName: "",
 //     lastName: "",
 //     profilePicture: "",
 //     craft: "",
 //     email: "",
+//     phone: "",
 //     isEmailVerified: null
-//   })
+//   }) as Ref<ProfileCredential>  // Explicit typing as Ref
 
 //   // Store the original data to compare against
 //   const originalCredential = ref<ProfileCredential | null>(null)
@@ -62,16 +64,16 @@
 //         : profilePayload
 
 //       // Only proceed if there are actual changes
-//       if (Object.keys(changedFields).length === 0) {
-//         loading.value = false
-//         showToast({
-//           title: "Info",
-//           message: "No changes detected to update",
-//           toastType: "info",
-//           duration: 3000
-//         })
-//         return null
-//       }
+//       // if (Object.keys(changedFields).length === 0) {
+//       //   loading.value = false
+//       //   showToast({
+//       //     title: "Info",
+//       //     message: "No changes detected to update",
+//       //     toastType: "info",
+//       //     duration: 3000
+//       //   })
+//       //   return null
+//       // }
 
 //       const res = await auth_api.$_update_profile(changedFields)
 
@@ -110,25 +112,65 @@
 //     }
 //   }
 
-//   // Load initial data
+//   // // Load initial data
+//   // onMounted(() => {
+//   //   const userData = localStorage.getItem("user")
+//   //   if (userData) {
+//   //     try {
+//   //       const parsedUser = JSON.parse(userData)
+//   //       const initialData: ProfileCredential = {
+//   //         firstName: parsedUser?.firstName || "",
+//   //         lastName: parsedUser?.lastName || "",
+//   //         profilePicture: parsedUser?.profilePicture || "",
+//   //         craft: parsedUser?.craft || profileObj?.value?.craft,
+//   //         email: parsedUser?.email || "",
+//   //         isEmailVerified: parsedUser?.isEmailVerified || null
+//   //       }
+        
+//   //       credential.value = initialData
+//   //       originalCredential.value = { ...initialData }
+//   //     } catch (error) {
+//   //       console.error("Error parsing user data from localStorage:", error)
+//   //     }
+//   //   }
+//   // })
+
+//   // Load initial data with proper nested optional chaining for craft
 //   onMounted(() => {
 //     const userData = localStorage.getItem("user")
-//     if (userData || profileObj.value) {
+//     if (userData) {
 //       try {
 //         const parsedUser = JSON.parse(userData)
-//         const initialData = {
-//           firstName: parsedUser?.firstName || profileObj?.value?.firstName,
-//           lastName: parsedUser?.lastName || profileObj?.value?.lastName,
-//           profilePicture: parsedUser?.profilePicture || profileObj?.value?.profilePicture,
-//           craft: parsedUser?.craft || profileObj?.value?.craft,
-//           email: parsedUser?.email || profileObj?.value?.email,
-//           isEmailVerified: parsedUser?.isEmailVerified || profileObj?.value?.isEmailVerified,
+//         const initialData: ProfileCredential = {
+//           firstName: parsedUser?.firstName || "",
+//           lastName: parsedUser?.lastName || "",
+//           profilePicture: parsedUser?.profilePicture || "",
+//           craft: parsedUser?.craft || profileObj.value?.craft || "",
+//           email: parsedUser?.email || "",
+//           phone: parsedUser?.phone || "",
+//           isEmailVerified: parsedUser?.isEmailVerified || null
 //         }
         
 //         credential.value = initialData
 //         originalCredential.value = { ...initialData }
 //       } catch (error) {
 //         console.error("Error parsing user data from localStorage:", error)
+//       }
+//     } else {
+//       // Handle case when no user data in localStorage but profileObj exists
+//       if (profileObj.value) {
+//         const initialData: ProfileCredential = {
+//           firstName: profileObj.value?.firstName || "",
+//           lastName: profileObj.value?.lastName || "",
+//           profilePicture: profileObj.value?.profilePicture || "",
+//           craft: profileObj.value?.craft || "",
+//           email: profileObj.value?.email || "",
+//           phone: profileObj.value?.phone || "",
+//           isEmailVerified: profileObj.value?.isEmailVerified || null
+//         }
+        
+//         credential.value = initialData
+//         originalCredential.value = { ...initialData }
 //       }
 //     }
 //   })
@@ -137,10 +179,10 @@
 //     credential,
 //     updateProfile,
 //     loading,
-//     error
+//     error,
+//     profileObj
 //   }
 // }
-
 import { auth_api } from "@/api_factory/modules/auth"
 import { useRouter } from "vue-router"
 import { ref, onMounted, watch } from "vue"
@@ -207,16 +249,16 @@ export const use_update_profile = () => {
         : profilePayload
 
       // Only proceed if there are actual changes
-      if (Object.keys(changedFields).length === 0) {
-        loading.value = false
-        showToast({
-          title: "Info",
-          message: "No changes detected to update",
-          toastType: "info",
-          duration: 3000
-        })
-        return null
-      }
+      // if (Object.keys(changedFields).length === 0) {
+      //   loading.value = false
+      //   showToast({
+      //     title: "Info",
+      //     message: "No changes detected to update",
+      //     toastType: "info",
+      //     duration: 3000
+      //   })
+      //   return null
+      // }
 
       const res = await auth_api.$_update_profile(changedFields)
 

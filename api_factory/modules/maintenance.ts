@@ -14,13 +14,13 @@ export const maintenance_api = {
         let url = `/maintenance-requests/${id}`  
         return GATEWAY_ENDPOINT.get(url)
       },
-      $_accept_maintenance_request: (maintenanceRequestId: string) => {
+      $_accept_maintenance_request: (maintenanceRequestId: string, payload: any) => {
         let url = `/maintenance-requests/${maintenanceRequestId}/accepted`  
-        return GATEWAY_ENDPOINT.patch(url)
+        return GATEWAY_ENDPOINT.patch(url, payload)
       },
-      $_decline_maintenance_request: (maintenanceRequestId: string) => {
+      $_decline_maintenance_request: (maintenanceRequestId: string, payload: any) => {
         let url = `/maintenance-requests/${maintenanceRequestId}/declined`  
-        return GATEWAY_ENDPOINT.patch(url)
+        return GATEWAY_ENDPOINT.patch(url, payload)
       },
       $_complete_maintenance_request: (maintenanceRequestId: string) => {
         let url = `/maintenance-requests/${maintenanceRequestId}/completed`  

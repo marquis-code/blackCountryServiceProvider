@@ -54,7 +54,7 @@
             </div>
             <div>
               <label for="phone" class="text-[#1D2739] text-sm">Phone Number</label>
-              <input name="phone" id="phone" v-model="credential.phone" type="phone" class="w-full p-2 mt-1 disabled:bg-gray-[#E4E7EC] cursor-not-allowed outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4" readonly/>
+              <input name="phone" id="phone" v-model="credential.phone" type="phone" class="w-full p-2 mt-1 disabled:bg-gray-[#E4E7EC] outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4"/>
             </div>
             <div>
               <label name="role" class="text-[#1D2739] text-sm">Craft</label>
@@ -197,7 +197,8 @@ const handleSave = async () => {
   const payload = {
     firstName: firstName || '',
     lastName: lastNameParts.join(' ') || '',
-    craft: credential?.value?.craft
+    craft: credential?.value?.craft,
+    phone: credential?.value?.phone
   };
   await updateProfile(payload);
 };

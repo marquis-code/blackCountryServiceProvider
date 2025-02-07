@@ -3,11 +3,16 @@ import { useCustomToast } from '@/composables/core/useCustomToast'
 const { showToast } = useCustomToast();
 const loading = ref(false)
 
+const payload = ref({
+    reason:  "",
+})
+
+
 export const useDeclineMaintenenceRequest = () => {
 	const declineMaintenenceRequest = async (id: any) => {
 		loading.value = true
 
-		const res = await maintenance_api.$_decline_maintenance_request(id) as any
+		const res = await maintenance_api.$_decline_maintenance_request(id, payload.value) as any
 
         if (res.type !== 'ERROR') {
             showToast({
@@ -28,5 +33,9 @@ export const useDeclineMaintenenceRequest = () => {
         loading.value = false
 	}
 
-	return { declineMaintenenceRequest, loading }
+    const setPayloadObj = (data: any) => {
+        payload.value.reason =  data.reason
+    }
+
+	return { declineMaintenenceRequest, loading, setPayloadObj, payload }
 }

@@ -26,40 +26,35 @@
             {{ maintenanceRequest?.status ?? 'Nil' }}
           </span>
         </div>
- 
+
         <div class="flex items-center space-x-3">
-  <!-- Update Status Button -->
-  <button 
-    v-if="maintenanceRequest?.status === 'accepted' || maintenanceRequest?.status === 'in_progress'"
-    @click="openModal('updateStatus')"
-    class="px-4 py-3 text-white text-sm bg-[#292929] font-medium rounded-lg">
-    Update Status
-  </button>
+          <!-- Update Status Button -->
+          <button v-if="maintenanceRequest?.status === 'accepted' || maintenanceRequest?.status === 'in_progress'"
+            @click="isUpdateStatusModalOpen = true" class="px-4 py-3 text-white text-sm bg-[#292929] font-medium rounded-lg">
+            Update Status
+          </button>
 
-  <!-- Generate Invoice Button -->
-  <button 
-    v-if="maintenanceRequest?.status === 'completed'"
-    @click="router.push(`/dashboard/maintenance/invoice?invoiceId=${route?.params?.id}`)"
-    class="px-4 py-3 text-white text-sm bg-[#292929] font-medium rounded-lg">
-    Generate Invoice
-  </button>
+          <!-- Generate Invoice Button -->
+          <button v-if="maintenanceRequest?.status === 'completed'"
+            @click="router.push(`/dashboard/maintenance/invoice?invoiceId=${route?.params?.id}`)"
+            class="px-4 py-3 text-white text-sm bg-[#292929] font-medium rounded-lg">
+            Generate Invoice
+          </button>
 
-  <!-- Accept and Decline Buttons -->
-  <div 
-    v-else-if="maintenanceRequest?.status !== 'in_progress' && maintenanceRequest?.status !== 'completed' && maintenanceRequest?.status !== 'accepted' && maintenanceRequest?.status !== 'declined'"
-    class="flex items-center space-x-3">
-    <button 
-      @click="openModal('accept')"
-      class="px-4 py-3 text-white text-sm bg-[#292929] font-medium rounded-lg">
-      Accept
-    </button>
-    <button 
-      @click="openModal('decline')"
-      class="px-4 py-3 text-[#1D192B] text-sm bg-[#EBE5E0] font-medium rounded-lg">
-      Decline
-    </button>
-  </div>
-</div>
+          <!-- Accept and Decline Buttons -->
+          <div
+            v-else-if="maintenanceRequest?.status !== 'in_progress' && maintenanceRequest?.status !== 'completed' && maintenanceRequest?.status !== 'accepted' && maintenanceRequest?.status !== 'declined'"
+            class="flex items-center space-x-3">
+            <button @click="openModal('accept')"
+              class="px-4 py-3 text-white text-sm bg-[#292929] font-medium rounded-lg">
+              Accept
+            </button>
+            <button @click="openModal('decline')"
+              class="px-4 py-3 text-[#1D192B] text-sm bg-[#EBE5E0] font-medium rounded-lg">
+              Decline
+            </button>
+          </div>
+        </div>
 
       </div>
 
@@ -112,7 +107,7 @@
       </div>
 
       <!-- Modal for Accept/Decline Confirmation -->
-      <MaintenanceModal :maintenanceRequest="maintenanceRequest" v-if="isModalOpen" :type="modalType"
+      <MaintenanceModal :maintenanceRequest="maintenanceRequest" v-if="isUpdateStatusModalOpen" :type="modalType"
         @close="closeModal" />
     </section>
     <div v-else-if="!maintenanceRequest.length && loading" class="rounded-md p-4 max-w-4xl mx-auto mt-10">
@@ -123,16 +118,60 @@
       </div>
     </div>
     <MaintenanceEmptyState v-else />
+
+
+    <!-- Modal for Accepting Request -->
+    <div v-if="isModalOpen && modalType === 'accept'" class="modal-overlay">
+      <div class="modal-content space-y-3">
+        <h3 class="text-lg font-medium pb-5">Accept maintenance request</h3>
+       <div>
+        <label class="text-sm">Date</label>
+        <input type="date" v-model="selectedDate" placeholder="Select the date you plan on providing your service" class="input-field border rounded-lg bg-gray-25 rounded-lg border-[0.5px] text-sm py-3.5" />
+       </div>
+<div>
+  <label class="text-sm">Time</label>
+  <input type="time" placeholder="Select a time" v-model="selectedTime" class="input-field border rounded-lg bg-gray-25 rounded-lg border-[0.5px] text-sm py-3.5" />
+</div>
+        <div class="modal-actions pt-5 space-x-6">
+          <button @click="closeModal" class="bg-white text-[#292929] border w-full rounded-lg text-sm py-3">Cancel</button>
+          <button :disabled="accepting" @click="confirmAccept" class="confirm-button disabled:cursor-not-allowed disabled:opacity-25 bg-[#292929] w-full rounded-lg text-sm py-3">{{ accepting ?  'processing..' : 'Proceed' }}</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal for Declining Request -->
+    <div v-if="isModalOpen && modalType === 'decline'" class="modal-overlay">
+      <div class="modal-content">
+        <h3 class="text-lg font-medium pb-5">Decline maintenance request</h3>
+        <label class="text-sm pb-3">What’s your reason for rejecting this request</label>
+        <textarea v-model="declineReason" class="input-field border mt-2 rounded-lg bg-gray-25 rounded-lg border-[0.5px] text-sm py-3.5 resize-none" rows="6"></textarea>
+        <!-- <div class="modal-actions">
+          <button @click="closeModal" class="cancel-button">Cancel</button>
+          <button @click="confirmDecline" class="confirm-button">Continue</button>
+        </div> -->
+        <div class="modal-actions pt-6 space-x-6">
+          <button @click="closeModal" class="bg-white text-[#292929] border w-full rounded-lg text-sm py-3">Cancel</button>
+          <button :disabled="delining" @click="confirmDecline" class="confirm-button disabled:cursor-not-allowed disabled:opacity-2 bg-[#292929] w-full rounded-lg text-sm py-3">{{ declining ?  'processing..' : 'Continue' }}</button>
+        </div>
+      </div>
+    </div>
   </main>
 </template>
 
 <script lang="ts" setup>
+  import { useAcceptMaintenenceRequest } from '@/composables/modules/maintenance/useAcceptMaintenanceRequest'
+    import { useDeclineMaintenenceRequest } from '@/composables/modules/maintenance/useRejectMaintenanceRequest'
 import { useFetchMaintenanceRequest } from '@/composables/modules/maintenance/useFetchMaintenenceRequest'
+const { loading: accepting, acceptMaintenenceRequest, setPayload } = useAcceptMaintenenceRequest()
+const { loading: declining, declineMaintenenceRequest, setPayloadObj } = useDeclineMaintenenceRequest()
 const {
   maintenanceRequest, loading } = useFetchMaintenanceRequest()
 import { ref } from 'vue';
 const router = useRouter()
 const route = useRoute()
+const selectedDate = ref(null);
+const selectedTime = ref(null);
+const declineReason = ref('');
 
 const handleMessaging = () => {
   localStorage.setItem('selected-user', JSON.stringify(maintenanceRequest.value.tenant))
@@ -141,14 +180,16 @@ const handleMessaging = () => {
 
 
 const isModalOpen = ref(false);
+
+const isUpdateStatusModalOpen = ref(false);
 const modalType = ref<string | null>(null);
 
-const openModal = (type: string) => {
-  modalType.value = type;
-  isModalOpen.value = true;
-};
+// const openModal = (type: string) => {
+//   modalType.value = type;
+//   isModalOpen.value = true;
+// };
 
-const colorMapGenerator = (color) => {
+const colorMapGenerator = (color: any) => {
   const colorMap = {
     'in_progress': 'text-[#DD900D] bg-[#FEF6E7]',
     'completed': 'text-[#099137] bg-[#E7F6EC]',
@@ -160,11 +201,98 @@ const colorMapGenerator = (color) => {
   return colorMap[color] || '';
 }
 
-const closeModal = () => {
-  isModalOpen.value = false;
-};
+// const closeModal = () => {
+//   isModalOpen.value = false;
+// };
 
 const goBack = () => {
   window.history.back();
 };
+
+const formatTime = (time) => {
+  if (!time) return '';
+  const [hour, minute] = time.split(':');
+  let formattedHour = parseInt(hour, 10);
+  const suffix = formattedHour >= 12 ? 'PM' : 'AM';
+  formattedHour = formattedHour % 12 || 12;
+  return `${String(formattedHour).padStart(2, '0')}:${minute} ${suffix}`;
+};
+
+
+
+const confirmAccept = async () => {
+  console.log(`Accepted on ${selectedDate.value} at ${selectedTime.value}`);
+  const formattedTime = formatTime(selectedTime.value);
+  const payloadObj = {
+     expectedStartDate: selectedDate.value,
+     expectedStartTime: formattedTime
+  }
+  setPayload(payloadObj)
+  await acceptMaintenenceRequest(maintenanceRequest.value.id)
+  closeModal();
+};
+
+const confirmDecline = async () => {
+  // console.log(`Declined with reason: ${declineReason.value}`);
+  const payloadObj = {
+     reason: declineReason.value
+  }
+  setPayloadObj(payloadObj)
+  await declineMaintenenceRequest(maintenanceRequest.value.id)
+  closeModal();
+};
+
+const openModal = (type) => {
+  modalType.value = type;
+  isModalOpen.value = true;
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+  modalType.value = null;
+};
 </script>
+
+<style scoped>
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  width: 400px;
+}
+
+.input-field {
+  width: 100%;
+  margin-bottom: 10px;
+  padding: 8px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cancel-button {
+  background: #ccc;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.confirm-button {
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+}
+</style>

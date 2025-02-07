@@ -3,11 +3,16 @@ import { useCustomToast } from '@/composables/core/useCustomToast'
 const { showToast } = useCustomToast();
 const loading = ref(false)
 
+const payload = ref({
+    expectedStartDate:  "2025-02-06",
+     expectedStartTime: "10 AM"
+})
+
 export const useAcceptMaintenenceRequest = () => {
 	const acceptMaintenenceRequest = async (id: any) => {
 		loading.value = true
 
-		const res = await maintenance_api.$_accept_maintenance_request(id) as any
+		const res = await maintenance_api.$_accept_maintenance_request(id, payload.value) as any
 
         if (res.type !== 'ERROR') {
             showToast({
@@ -28,5 +33,10 @@ export const useAcceptMaintenenceRequest = () => {
         loading.value = false
 	}
 
-	return { acceptMaintenenceRequest, loading }
+    const setPayload = (data: any) => {
+        payload.value.expectedStartDate =  data.expectedStartDate
+        payload.value.expectedStartTime =  data.expectedStartTime
+    }
+
+	return { acceptMaintenenceRequest, loading, setPayload, payload }
 }

@@ -6,13 +6,13 @@
       <div class="flex items-center space-x-4">
         <img src="@/assets/icons/white-logo-with-text.svg" alt="" />
 
-      <div class="block lg:hidden">
+      <!-- <div class="block lg:hidden border-4 w-full">
         <button @click="isOpen = true" class="p-2">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
           </svg>
         </button>
-      </div>
+      </div> -->
 
         <div class="flex items-center space-x-2 hidden lg:flex">
           <NuxtLink to="/dashboard" class="px-4 py-3 rounded-lg flex items-center gap-x-1.5 text-sm">
@@ -44,13 +44,25 @@
           <img class="h-8 cursor-pointer" src="@/assets/icons/notification.svg" alt="" />
        </NuxtLink>
 
-        <NuxtLink to="/dashboard/profile" class="flex cursor-pointer items-center block space-x-2">
+        <!-- <NuxtLink to="/dashboard/profile" class="flex cursor-pointer items-center block space-x-2">
           <img src="@/assets/icons/user-icon.svg" alt="" />
 
           <span class="text-">{{ `${user?.firstName} ${user?.lastName}` ?? 'Nil' }}</span>
           <img src="@/assets/icons/more-caret.svg" alt="" />
 
-        </NuxtLink>
+        </NuxtLink> -->
+        <ProfileDropdown 
+          :user="user" 
+          :profileObj="profileObj" 
+        />
+      </div>
+
+      <div class="block lg:hidden w-full flex justify-end items-end">
+        <button @click="isOpen = true" class="p-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+          </svg>
+        </button>
       </div>
     </nav>
 
@@ -60,14 +72,6 @@
     <div class="fixed inset-0 flex">
       <div class="relative mr-16 flex w-full flex-1">
 
-        <!-- <div class="absolute left-full top-0 flex w-16 justify-center pt-5">
-          <button @click="isOpen = false" type="button" class="-m-2.5 p-2.5">
-            <span class="sr-only">Close sidebar</span>
-            <svg class="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div> -->
 
         <div class="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-900 px-6 ring-1 ring-white/10">
           <!-- <div class="flex h-16 shrink-0 items-center pt-4">
@@ -77,13 +81,14 @@
             <!-- Profile Picture -->
             <div class="flex items-center space-x-3">
               <div class="w-10 h-10 rounded-full border-2 border-white overflow-hidden">
-                <img src="@/assets/img/female-avatar.png" alt="User profile" class="object-cover w-full h-full" />
+                <img v-if="user.profilePicture" :src="user?.profilePicture" alt="User profile" class="object-cover w-full h-full" />
+                <img v-else src="@/assets/icons/users-avatar.svg" class="object-cover w-full h-full" alt="User profile"  />
               </div>
               
               <!-- User Info -->
               <div>
-                <p class="font-semibold">Saeed Adenuga</p>
-                <p class="text-sm text-gray-300">saeed.adenuga@gmail.com</p>
+                <p class="font-semibold">{{ `${user.firstName} ${user.lastName}` }}</p>
+                <p class="text-sm text-gray-300">{{ user.email ?? 'Nil' }}</p>
               </div>
             </div>
             
@@ -191,20 +196,7 @@
                 </ul>
               </li>
 
-              <!-- <li class="mt-auto">
-                <a
-                  href="#"
-                  @click="showLogoutModal = true"
-                  class="group -mx-2 flex gap-x-3 rounded-md p-2 py-3 text-sm font-semibold leading-6 text-gray-400 hover:bg-gray-800 hover:text-white"
-                >
-                  <img
-                    :src="dynamicIcons('logout')"
-                    alt="logout"
-                    class="h-6 w-6"
-                  />
-                  Logout
-                </a>
-              </li> -->
+  
             </ul>
           </nav>
         </div>
@@ -256,6 +248,8 @@
 
   <script setup lang="ts">
     import { useUser } from '@/composables/auth/user'
+         import { use_service_provider_profile } from '@/composables/auth/fetchProfile'
+    const { loading, profileObj } = use_service_provider_profile()
     const { user } = useUser()
 const router = useRouter()
 const isOpen = ref(false)
