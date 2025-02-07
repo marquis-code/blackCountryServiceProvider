@@ -30,7 +30,7 @@
         <div class="flex items-center space-x-3">
           <!-- Update Status Button -->
           <button v-if="maintenanceRequest?.status === 'accepted' || maintenanceRequest?.status === 'in_progress'"
-            @click="isUpdateStatusModalOpen = true" class="px-4 py-3 text-white text-sm bg-[#292929] font-medium rounded-lg">
+            @click="openModal('updateStatus')" class="px-4 py-3 text-white text-sm bg-[#292929] font-medium rounded-lg">
             Update Status
           </button>
 
@@ -108,7 +108,7 @@
 
       <!-- Modal for Accept/Decline Confirmation -->
       <MaintenanceModal :maintenanceRequest="maintenanceRequest" v-if="isUpdateStatusModalOpen" :type="modalType"
-        @close="closeModal" />
+        @close="isUpdateStatusModalOpen = false" />
     </section>
     <div v-else-if="!maintenanceRequest.length && loading" class="rounded-md p-4 max-w-4xl mx-auto mt-10">
       <div class="animate-pulse flex space-x-4">
@@ -180,6 +180,7 @@ const handleMessaging = () => {
 
 
 const isModalOpen = ref(false);
+// const isUpdateStatusModalOpen = ref(false);
 
 const isUpdateStatusModalOpen = ref(false);
 const modalType = ref<string | null>(null);
@@ -244,7 +245,12 @@ const confirmDecline = async () => {
 
 const openModal = (type) => {
   modalType.value = type;
-  isModalOpen.value = true;
+  if(type === 'updateStatus'){
+    isUpdateStatusModalOpen.value = true
+  } else {
+    isModalOpen.value = true;
+  }
+
 };
 
 const closeModal = () => {

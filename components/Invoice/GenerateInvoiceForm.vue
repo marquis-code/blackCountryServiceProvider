@@ -28,6 +28,12 @@
         <span class="font-semibold text-[#1D2939] -mt-6">Generate Invoice</span>
       </div>
 
+      <!-- {{ formData }}
+
+      {{ bankAccounts }}
+
+      {{ payload }} -->
+
       <!-- Generate Invoice Step -->
       <div v-if="activeStep === 'generate'">
         <h2 class="mb-4 text-base font-medium">Details</h2>
@@ -322,6 +328,7 @@ const {
 
 const { loading: fetchingBanks, banksList } = useFetchNigerianBanks()
 const { resolveBank, resolvingBankInfo, bankObj } = useResolveBank()
+const items = ref<InvoiceItem[]>([{ name: '', price: 0, quantity: 0 }]);
 
 
 const payload = ref({
@@ -512,21 +519,61 @@ onMounted(() => {
   });
 });
 
+// const isButtonDisabled = computed(() => {
+//     return !(
+//       formData.value.billFrom &&
+//       formData.value.billTo &&
+//       formData.value.recipientEmail &&
+//       formData.value.billTitle &&
+//       formData.value.issuedOn &&
+//       formData.value.dueOn &&
+//       formData.value.note &&
+//       bankAccounts.value.accountNumber || payload.value.accountNumber &&
+//       bankAccounts.value.bankName || payload.value.bankName &&
+//       bankAccounts.value.bankSortCode || payload.value.bankSortCode &&
+//       bankAccounts.value.accountName || payload.value.accountName
+//     );
+//   });''
+
 const isButtonDisabled = computed(() => {
-    return !(
-      formData.value.billFrom &&
-      formData.value.billTo &&
-      formData.value.recipientEmail &&
-      formData.value.billTitle &&
-      formData.value.issuedOn &&
-      formData.value.dueOn &&
-      formData.value.note &&  
-      bankAccounts.value.accountNumber &&
-      bankAccounts.value.bankName &&
-      bankAccounts.value.bankSortCode &&
-      bankAccounts.value.accountName
-    );
-  });
+  const {
+    billFrom,
+    billTo,
+    recipientEmail,
+    billTitle,
+    issuedOn,
+    dueOn,
+    note
+  } = formData.value;
+
+  const {
+    accountNumber = payload.value.accountNumber,
+    bankName = payload.value.bankName,
+    bankSortCode = payload.value.bankSortCode,
+    accountName = payload.value.accountName
+  } = bankAccounts.value;
+
+  return !(
+    billFrom &&
+    billTo &&
+    recipientEmail &&
+    billTitle &&
+    issuedOn &&
+    dueOn &&
+    note &&
+    accountNumber &&
+    items &&
+    bankName &&
+    bankSortCode &&
+    accountName
+  );
+});
+
+
+  // accountName: bankAccounts?.value?.accountName ?? payload.value.accountName,
+  // accountNumber: bankAccounts?.value?.accountNumber ?? payload.value.accountNumber,
+  // bankSortCode: String(bankAccounts?.value?.bankSortCode) ?? payload.value.bankSortCode,
+  // bankName: bankAccounts?.value?.bankName ?? payload.value.bankName,
 
 const props = defineProps({
   title: {
@@ -540,7 +587,6 @@ interface InvoiceItem {
   quantity: number;
 }
 
-const items = ref<InvoiceItem[]>([{ name: '', price: 0, quantity: 0 }]);
 
 const addItem = () => {
   items.value.push({ name: '', price: 0, quantity: 0 });
@@ -616,7 +662,7 @@ const handleSubmit = async () => {
   grandTotal,
   accountName: bankAccounts?.value?.accountName ?? payload.value.accountName,
   accountNumber: bankAccounts?.value?.accountNumber ?? payload.value.accountNumber,
-  bankSortCode: String(bankAccounts?.value?.bankSortCode) ?? payload.value.bankSortCode,
+  bankSortCode: bankAccounts?.value?.bankSortCode ?? payload.value.bankSortCode,
   bankName: bankAccounts?.value?.bankName ?? payload.value.bankName,
 };
 
