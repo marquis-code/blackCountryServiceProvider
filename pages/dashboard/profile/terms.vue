@@ -3,14 +3,6 @@
     <TopNavBar />
   </div>
   <main>
-    <div  class="max-w-4xl mx-auto p-3">
-      <svg @click="router.back()" class="cursor-pointer mb-3" width="36" height="36" viewBox="0 0 36 36" fill="none"
-          xmlns="http://www.w3.org/2000/svg">
-          <rect width="36" height="36" rx="18" fill="#EAEAEA" />
-          <path d="M20.5 13C20.5 13 15.5 16.6824 15.5 18C15.5 19.3177 20.5 23 20.5 23" stroke="#1D2739"
-            stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
-    </div>
     <div v-if="!loading && Object.keys(termsList || {})?.length" class="max-w-4xl mx-auto">
       <svg @click="router.back()" class="cursor-pointer mb-3" width="36" height="36" viewBox="0 0 36 36" fill="none"
         xmlns="http://www.w3.org/2000/svg">
@@ -29,10 +21,6 @@
       <div v-if="lastUpdated" class="text-sm text-gray-500 mb-6">
         <p>Current as of <strong>{{ lastUpdated }}</strong></p>
       </div>
-
-      <!-- Title -->
-      <h1 class="text-2xl font-semibold text-gray-800 mb-6">Terms & Conditions</h1>
-
       <!-- Rendered Terms List -->
       <div v-html="formattedTermsList" class="space-y-6 text-gray-700"></div>
     </div>
