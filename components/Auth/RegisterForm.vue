@@ -90,14 +90,25 @@
         <label for="password" class="block text-sm font-medium text-[#1D2739]"
           >Password (6+ characters minimum)</label
         >
-        <input
+        <!-- <input
           :type="showPassword ? 'text' : 'password'"
           id="password"
           min="6"
           v-model.trim="credential.password.value"
           placeholder="Enter your password"
           class="mt-1 block w-full bg-[#E4E7EC] text-sm px-4 py-4 border-[0.5px] border-gray-100 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-        />
+        /> -->
+        <input
+            :type="showPassword ? 'text' : 'password'"
+            id="password"
+            minlength="6"
+            v-model.trim="credential.password.value"
+            placeholder="Enter your password"
+            class="mt-1 block w-full bg-[#E4E7EC] text-sm px-4 py-4 border-[0.5px] border-gray-100 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          />
+          <p v-if="credential.password.value.length > 0 && credential.password.value.length < 6" class="text-red-500 text-sm">
+            Password must be at least 6 characters long.
+          </p>
         <div
           @click="toggleShowPassword"
           class="absolute inset-y-0 right-4 top-6 flex items-center cursor-pointer"
@@ -174,14 +185,25 @@
           class="block text-sm font-medium text-[#1D2739]"
           >Confirm password</label
         >
-        <input
+        <!-- <input
           :type="showConfirmPassword ? 'text' : 'password'"
           id="confirm-password"
           min="6"
           v-model.trim="credential.confirmPassword.value"
           placeholder="Confirm your password"
           class="mt-1 block w-full bg-[#E4E7EC] text-sm px-4 py-4 border-[0.5px] border-gray-100 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
-        />
+        /> -->
+        <input
+            :type="showConfirmPassword ? 'text' : 'password'"
+            id="confirm-password"
+            minlength="6"
+            v-model.trim="credential.confirmPassword.value"
+            placeholder="Confirm your password"
+            class="mt-1 block w-full bg-[#E4E7EC] text-sm px-4 py-4 border-[0.5px] border-gray-100 rounded-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500"
+          />
+          <p v-if="credential.confirmPassword.value.length > 0 && credential.confirmPassword.value.length < 6" class="text-red-500 text-sm">
+            Password must be at least 6 characters long.
+          </p>
         <div
           @click="toggleConfirmShowPassword"
           class="absolute inset-y-0 right-4 top-6 flex items-center cursor-pointer"
