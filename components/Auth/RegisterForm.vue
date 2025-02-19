@@ -293,8 +293,8 @@
 
         <label for="terms" class="ml-2 block text-sm text-gray-900">
           I have read and have agreed to BlackCountry's
-          <a href="#" class="text-[#326543]">Terms of Service</a> and
-          <a href="#" class="text-[#326543]">Privacy Policy</a>
+          <NuxtLink to="/terms" class="text-[#326543]">Terms of Service</NuxtLink> and
+          <NuxtLink to="/privacy" class="text-[#326543]">Privacy Policy</NuxtLink>
         </label>
       </div>
 
