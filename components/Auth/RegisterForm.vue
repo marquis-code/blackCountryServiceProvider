@@ -297,7 +297,7 @@
           <NuxtLink to="/privacy" class="text-[#326543]">Privacy Policy</NuxtLink>
         </label>
       </div>
-
+<!-- {{ isFormDisabled }} -->
       <button
         type="submit"
         :disabled="isFormDisabled || processing || emailExists"
