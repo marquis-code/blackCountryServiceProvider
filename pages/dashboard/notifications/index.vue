@@ -5,7 +5,6 @@
         <div class="lg:flex space-y-6 w-full flex-1 overflow-hidden">
           <section class="lg:hidden w-full h-screen">
           <transition name="flip" mode="out-in">
-            <!-- Notification List -->
             <div v-if="!showDetail" class="h-full">
               <div class="flex items-center justify-between p-4 border-b">
                 <h1 class="text-xl font-semibold">Notification</h1>
