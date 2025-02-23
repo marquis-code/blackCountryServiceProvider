@@ -1,74 +1,22 @@
 <template>
-    <div class="p-4 bg-white">
-
-        <!-- <div class="flex items-center space-x-4 p-2 ">
-     
-            <div class="relative flex items-center bg-[#EAEAEA] rounded-lg px-3 py-2 w-full">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5 text-gray-500"
-                viewBox="0 0 20 20"
-                fill="currentColor"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M12.9 14.32a8 8 0 111.414-1.414l4.387 4.386a1 1 0 11-1.414 1.415l-4.387-4.387zM8 14a6 6 0 100-12 6 6 0 000 12z"
-                  clip-rule="evenodd"
-                />
-              </svg>
-              <input
-                type="text"
-                class="bg-[#EAEAEA] text-gray-600 text-sm ml-2 py-1.5 focus:outline-none w-full"
-                placeholder="Search"
-              />
-            </div>
-          
-
-            <button
-            @click="toggleDropdown"
-              class="bg-[#EAEAEA] p-2 rounded-lg  transition-colors"
-            >
-            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10.8333 3.33398H2.5" stroke="#1D2739" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M9.16667 15.834H2.5" stroke="#1D2739" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M17.5001 15.834H14.1667" stroke="#1D2739" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M17.5001 9.58398H9.16675" stroke="#1D2739" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M17.4999 3.33398H15.8333" stroke="#1D2739" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M4.16667 9.58398H2.5" stroke="#1D2739" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M12.0833 1.66602C12.4715 1.66602 12.6657 1.66602 12.8188 1.72945C13.023 1.81402 13.1853 1.97626 13.2698 2.18045C13.3333 2.33359 13.3333 2.52773 13.3333 2.91602V3.74935C13.3333 4.13763 13.3333 4.33177 13.2698 4.48492C13.1853 4.68911 13.023 4.85134 12.8188 4.93592C12.6657 4.99935 12.4715 4.99935 12.0833 4.99935C11.695 4.99935 11.5008 4.99935 11.3477 4.93592C11.1435 4.85134 10.9813 4.68911 10.8967 4.48492C10.8333 4.33177 10.8333 4.13763 10.8333 3.74935V2.91602C10.8333 2.52773 10.8333 2.33359 10.8967 2.18045C10.9813 1.97626 11.1435 1.81402 11.3477 1.72945C11.5008 1.66602 11.695 1.66602 12.0833 1.66602Z" stroke="#1D2739" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M10.4167 14.166C10.805 14.166 10.9992 14.166 11.1523 14.2294C11.3565 14.314 11.5187 14.4763 11.6033 14.6804C11.6667 14.8336 11.6667 15.0278 11.6667 15.416V16.2493C11.6667 16.6376 11.6667 16.8318 11.6033 16.9849C11.5187 17.1891 11.3565 17.3513 11.1523 17.4359C10.9992 17.4993 10.805 17.4993 10.4167 17.4993C10.0285 17.4993 9.83433 17.4993 9.68116 17.4359C9.477 17.3513 9.31475 17.1891 9.23017 16.9849C9.16675 16.8318 9.16675 16.6376 9.16675 16.2493V15.416C9.16675 15.0278 9.16675 14.8336 9.23017 14.6804C9.31475 14.4763 9.477 14.314 9.68116 14.2294C9.83433 14.166 10.0285 14.166 10.4167 14.166Z" stroke="#1D2739" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                <path d="M7.91675 7.91602C8.30503 7.91602 8.49917 7.91602 8.65233 7.97945C8.8565 8.06402 9.01875 8.22626 9.10333 8.43043C9.16675 8.5836 9.16675 8.77777 9.16675 9.16602V9.99935C9.16675 10.3876 9.16675 10.5818 9.10333 10.7349C9.01875 10.9391 8.8565 11.1013 8.65233 11.1859C8.49917 11.2493 8.30503 11.2493 7.91675 11.2493C7.52846 11.2493 7.33432 11.2493 7.18118 11.1859C6.97699 11.1013 6.81476 10.9391 6.73018 10.7349C6.66675 10.5818 6.66675 10.3876 6.66675 9.99935V9.16602C6.66675 8.77777 6.66675 8.5836 6.73018 8.43043C6.81476 8.22626 6.97699 8.06402 7.18118 7.97945C7.33432 7.91602 7.52846 7.91602 7.91675 7.91602Z" stroke="#1D2739" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                
-            </button>
-
-            <div v-if="showDropdown" class="fixed inset-0 z-50" @click="toggleDropdown">
-    
-              <div class="absolute left-[140px] mt-2 top-36 w-44 bg-white rounded-lg border-[0.5px] border-gray-25 z-20 shadow">
-                <ul>
-                  <li
-                    class="flex items-center justify-between text-sm px-4 py-2 mb-2 border-b text-[#1D2739] last:border-b-0 border-gray-100 cursor-pointer "
-                  >
-                     Read
-                  </li>
-                  <li
-                    class="flex items-center justify-between text-sm px-4 py-1 mb-2 border-b text-[#1D2739] last:border-b-0 border-gray-100 cursor-pointer "
-                  >
-                     Unread
-                  </li>
-                </ul>
-              </div>
-            </div>
-        </div> -->
-  
+    <div class="p-4 bg-white">  
       <ul class="w-full" v-if="users?.length && !loading">
-        <li
+        
+        <!-- <li
           v-for="user in users"
           :key="user?.participant?.id"
           :class="{'bg-gray-200' : user.id === selectedUserChat.id}"
           @click="selectUser(user)"
           class="flex items-center cursor-pointer rounded justify-between p-3 border-b hover:bg-gray-100 last:border-b-0 border-gray-100 cursor-pointer"
+        > -->
+        <li
+          v-for="user in users"
+          :class="[!selectedUserChat?.id ? (user?.participant.id === route?.query?.userId ? 'bg-gray-200' : '') : (user.id === selectedUserChat.id ? 'bg-gray-200' : '') ]"
+          :key="user?.participant?.id"
+          @click="selectUser(user)"
+          class="flex items-center cursor-pointer rounded justify-between p-3 border-b hover:bg-gray-100 last:border-b-0 border-gray-100 cursor-pointer"
         >
+        <!-- {{ user.id }} -->
    
           <div class="flex items-center w-full">
             <img v-if="user?.participant?.profilePicture" :src="user?.participant?.profilePicture" class="w-10 h-10 rounded-full mr-3" alt="" />
@@ -85,7 +33,10 @@
              </div>
              <div class='flex justify-between items-center w-full'>
               <p class="text-sm text-[#667185]">{{ user?.lastMessage?.content }}</p>
-              <svg v-if="user?.lastMessage?.recievedAt === null || user?.lastMessage?.readAt === null" width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <!-- <svg v-if="user?.lastMessage?.recievedAt === null || user?.lastMessage?.readAt === null" width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="5" cy="5" r="4" fill="#099137"/>
+                </svg> -->
+                <svg v-if="user?.lastMessage?.readAt === null" width="10" height="10" viewBox="0 0 10 10" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="5" cy="5" r="4" fill="#099137"/>
                 </svg>
              </div>

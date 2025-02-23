@@ -146,6 +146,7 @@
         <NuxtLink to="/signup" class="text-[#326543] font-semibold">Sign Up</NuxtLink>
       </p> -->
     </div>
+    <CoreFullScreenLoader :visible="loading" text="Please wait while we authenticate your account..." />
   </template>
   
 <script setup lang="ts">

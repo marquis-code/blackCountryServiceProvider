@@ -3,6 +3,10 @@
     <main class="">  
       <div class="flex flex-col justify-between">
         <div class="max-w-3xl mx-auto p-6 w-full">
+          <svg @click="router.back()" class="cursor-pointer" width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect width="36" height="36" rx="18" fill="#EAEAEA"/>
+            <path d="M20.5 13C20.5 13 15.5 16.6824 15.5 18C15.5 19.3177 20.5 23 20.5 23" stroke="#1D2739" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
           <div class="text-gray-500 flex-col">
             <h2 class="text-lg font-semibold text-[#1D2739] pt-3">Profile Information</h2>            
           </div>
@@ -10,6 +14,7 @@
 <!-- {{ credential }} -->
 
           <div class="space-y-6">
+            <!-- {{ credential }} -->
             <div class="">
               <div class="mt-6 bg-[#F0F2F5] rounded-lg p-6 justify-center text-center flex items-center">
                 <div id="image-preview" class="mb-4 pr-10">
@@ -54,7 +59,7 @@
             </div>
             <div>
               <label for="phone" class="text-[#1D2739] text-sm">Phone Number</label>
-              <input name="phone" id="phone" v-model="credential.phone" type="phone" class="w-full p-2 mt-1 disabled:bg-gray-[#E4E7EC] outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4"/>
+              <input name="phone" id="phone" v-model="credential.phoneNumber" type="phone" class="w-full p-2 mt-1 disabled:bg-gray-[#E4E7EC] outline-none focus-within:border-2 focus-within:border-[#5B8469] border-[0.5px] text-sm rounded-md bg-[#E4E7EC] py-4"/>
             </div>
             <div>
               <label name="role" class="text-[#1D2739] text-sm">Craft</label>
@@ -135,6 +140,12 @@ watch(() => profileObj.value.craft, () => {
   credential.value.craft = profileObj?.value?.craft
 })
 
+watch(() => profileObj.value, () => {
+  credential.value.profilePicture = profileObj?.value?.profilePicture
+  credential.value.email = profileObj?.value?.email
+  credential.value.phoneNumber = profileObj?.value?.phoneNumber
+}, { deep: true, immediate: true})
+
 
 // Profile image state and file input ref
 const profileImage = ref<string | null>(null);
@@ -198,7 +209,7 @@ const handleSave = async () => {
     firstName: firstName || '',
     lastName: lastNameParts.join(' ') || '',
     craft: credential?.value?.craft,
-    phone: credential?.value?.phone
+    phoneNumber: credential?.value?.phoneNumber
   };
   await updateProfile(payload);
 };

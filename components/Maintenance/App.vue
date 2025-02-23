@@ -1,6 +1,6 @@
 <template>
     <main>
-        <section class="max-w-3xl mx-auto">
+        <section class="">
             <div class="p-4 min-h-screen space-y-4">
                 <h1 class="text-xl font-medium py-3 text-[#1D2739]">Maintenance</h1>
                 <MaintenanceHeaderActions @selected="handleSelected" />

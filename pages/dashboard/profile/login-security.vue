@@ -9,7 +9,7 @@
       </svg>
       <!-- Breadcrumbs -->
       <div class="text-sm text-gray-500 mb-4">
-        <span>Profile</span>
+        <NuxtLink to="/dashboard/profile">Profile</NuxtLink>
         <span class="mx-2">|</span>
         <span class="font-semibold text-gray-700">Login and security</span>
       </div>
@@ -66,7 +66,7 @@
       <section
         class="space-y-6 mt-5 border-[0.5px] disabled opacity-25 bg-white rounded-md border-gray-50 p-3"
       >
-        <CoreToggleSwitch
+        <!-- <CoreToggleSwitch
           id="EnablePasswordLogin"
           label="Enable Password login"
           v-model="options.passwordLogin"
@@ -77,7 +77,7 @@
           label="Enable Biometrics"
           v-model="options.biometricsLogin"
           extra="On clicking the switch, you enable fingerprint & face id login option"
-        />
+        /> -->
 
         <!-- Enable Password Login (disabled) -->
         <!-- <div class="flex justify-between items-center p-4 bg-gray-100">

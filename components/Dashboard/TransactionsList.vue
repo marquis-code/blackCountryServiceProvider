@@ -20,7 +20,7 @@
         <p class="text-base font-medium text-[#292929]">{{ payment.amount }}</p>
       </div>
     </div> -->
-    <section class="mt-10">
+    <!-- <section class="mt-10">
           <div
             class="flex justify-between items-center bg-white rounded-md py-5 px-4"
           >
@@ -139,7 +139,7 @@
               </div>
             </div>
           </div>
-        </section>
+        </section> -->
   </template>
   
   <script lang="ts" setup>

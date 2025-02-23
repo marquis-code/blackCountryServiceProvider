@@ -314,6 +314,7 @@
       >
     </p>
   </div>
+  <CoreFullScreenLoader :visible="loading" text="Please wait while we create your account..." />
 </template>
 
 <style scoped>

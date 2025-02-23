@@ -15,6 +15,14 @@
 <script setup lang="ts">
 import { provide } from 'vue';
 import { visible, toastData, useCustomToast } from '@/composables/core/useCustomToast';
+import { useWebSocket } from "@/composables/modules/messages/sockets";
+// import avatar from '@/assets/icons/user-avatar.svg'
+const {
+  messages,
+  newMessage,
+  isConnected,
+  sendMessage
+} = useWebSocket();
 
 // Provide the toast state globally
 provide('toastVisible', visible);

@@ -1,6 +1,6 @@
 <template>
     <main>
-     <section v-if="maintenanceRequests.length && !loading" class="max-w-4xl mx-auto bg-white rounded-lg">
+     <section v-if="maintenanceRequests.length && !loading" class="max-w-5xl px-4 mx-auto bg-white rounded-lg">
      <MaintenanceApp />
      </section>
      <div v-else-if="!maintenanceRequests.length && loading" class="rounded-md p-4 max-w-4xl mx-auto mt-10">

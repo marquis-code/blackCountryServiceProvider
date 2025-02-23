@@ -232,23 +232,24 @@ const isChecked = (invoice: Invoice) => {
                 class="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
             </td>
-            <td class="px-4 py-6 text-[#667185] font-light text-sm">{{ invoice.id.slice(0, 8) }}</td>
-            <td class="px-4 py-6 text-[#667185] font-light text-sm">{{ invoice.billFrom }}</td>
-            <td class="px-4 py-6 text-[#667185] font-light text-sm">{{ invoice.billTo }}</td>
-            <td class="px-4 py-6 text-[#667185] font-light text-sm">{{ invoice.grandTotal.toLocaleString() }}</td>
-            <td class="px-4 py-6 text-[#667185] font-light text-sm">{{ formatDate(invoice.issuedOn) }}</td>
-            <td class="px-4 py-6 text-[#667185] font-light text-sm">{{ formatDate(invoice.dueOn) }}</td>
-            <td class="px-4 py-6 text-[#667185] font-light text-sm">
+            <td class="px-4 py-6 font-medium text-[#667185] font-light text-sm">{{ invoice.id.slice(0, 8) }}</td>
+            <td class="px-4 py-6 font-medium text-[#667185] font-light text-sm">{{ invoice.billFrom }}</td>
+            <td class="px-4 py-6 font-medium text-[#667185] font-light text-sm">{{ invoice.billTo }}</td>
+            <td class="px-4 py-6 font-medium text-[#667185] font-light text-sm">{{ invoice.grandTotal.toLocaleString() }}</td>
+            <td class="px-4 py-6 font-medium text-[#667185] font-light text-sm">{{ formatDate(invoice.issuedOn) }}</td>
+            <td class="px-4 py-6 font-medium text-[#667185] font-light text-sm">{{ formatDate(invoice.dueOn) }}</td>
+            <td class="px-4 py-6 font-medium text-[#667185] font-light text-sm">
+              <!-- {{ invoice }} -->
               <span
                 :class="{
-                  'px-3 py-1 rounded-full text-sm': true,
+                  'px-3  py-2 rounded-full text-xs': true,
                   'bg-green-100 text-green-800': invoice.status === 'PAID',
-                  'bg-red-100 text-red-800': invoice.status === 'UNPAID'
+                  'bg-red-100 text-red-800': invoice.status === 'NOT PAID'
                 }"
               >
                 {{ invoice.status }}
               </span>
-              <button @click="updateInvoiceStatus(invoice)" type="button" v-if="invoice.status === 'NOT PAID'" class="cursor-pointer text-sm hover:underline">Mark as Paid</button>
+              <button @click="updateInvoiceStatus(invoice)" type="button" v-if="invoice.status === 'NOT PAID'" class="cursor-pointer ml-3 text-sm hover:underline">Mark As Paid</button>
             </td>
           </tr>
         </tbody>

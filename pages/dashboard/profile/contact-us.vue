@@ -14,7 +14,7 @@
       <CoreGoBack />
        <!-- Breadcrumbs -->
        <div class="text-sm text-gray-500 my-4">
-         <span>Profile</span>
+         <NuxtLink to="/dashboard/profile">Profile</NuxtLink>
          <span class="mx-2">|</span>
          <span class="font-medium text-gray-700">Contact us</span>
        </div>

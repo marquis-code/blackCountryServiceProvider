@@ -72,8 +72,13 @@
     <div class="flex-1 z-10 overflow-y-auto p-4 space-y-3 bg-white">
       <div v-for="(msg, index) in sortedMessagesWithHeaders" :key="msg.id || msg.dateHeader">
         <!-- Display date headers -->
-        <div v-if="msg.isHeader" class="text-center my-3 text-sm text-gray-400">
+        <!-- <div v-if="msg.isHeader" class="text-center my-3 text-sm text-gray-400">
           {{ msg.dateHeader }}
+        </div> -->
+        <div v-if="msg.isHeader" class="text-center my-6">
+          <span class="bg-[#F0F2F5] rounded-full font-semibold px-3 py-2 text-xs text-[#1D2739]">
+            {{ msg.dateHeader }}
+          </span>
         </div>
         
         <!-- Display chat messages -->

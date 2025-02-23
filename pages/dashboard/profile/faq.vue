@@ -1,6 +1,5 @@
 <template>
-  <main>
-    <TopNavBar />
+  <Layout>
     <div class="lg:p-6 p-3 bg-gray-25 min-h-screen">
       <div class="max-w-xl mx-auto">
         <svg @click="router.back()" class="cursor-pointer mb-3" width="36" height="36" viewBox="0 0 36 36" fill="none"
@@ -10,7 +9,7 @@
             stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
         <div class="text-sm text-gray-500 mb-4">
-          <span>Profile</span>
+          <NuxtLink to="/dashboard/profile">Profile</NuxtLink>
           <span class="mx-2">|</span>
           <span class="font-semibold text-gray-700">FAQs</span>
         </div>
@@ -99,15 +98,17 @@
       </div>
       </div>
     </div>
-  </main>
+  </Layout>
 </template>
 
 <script setup lang="ts">
 import { useFetchFaqs } from '@/composables/modules/settings/useFetchFaqs';
 import { ref, computed } from 'vue';
+import Layout from '@/layouts/dashboard.vue'
+const router = useRouter()
 
 const { loading, faqList } = useFetchFaqs();
-const router = useRouter();
+// const router = useRouter();
 const openFAQ = ref<number | null>(null);
 const searchQuery = ref(''); // Track the search input
 

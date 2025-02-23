@@ -1,6 +1,6 @@
 <!-- Invoice.vue -->
 <template>
-  <div class="p-6 max-w-6xl mx-auto">
+  <div class="p-6 max-w-5xl mx-auto">
     <!-- <h1 class="text-xl font-semibold text-[#1D2739]">Invoice</h1> -->
     <!-- <InvoiceSearch /> -->
     <InvoiceList v-if="invoices.length && !loading" :invoices="invoices"/>
